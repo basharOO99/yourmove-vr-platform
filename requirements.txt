@@ -1,0 +1,10 @@
+fastapi==0.129.0
+uvicorn==0.40.0
+SQLAlchemy==2.0.46
+pydantic==2.12.5
+python-jose==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==3.2.2
+python-multipart==0.0.22
+Jinja2==3.1.6
+websockets==16.0

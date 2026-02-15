@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Portal - YourMove</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e0e0ff;
+            overflow-x: hidden;
+        }
+        
+        /* Neon Gradient Colors */
+        :root {
+            --cyan: #00f5ff;
+            --purple: #8b5cf6;
+            --pink: #ff006e;
+            --dark-bg: #0a0a0f;
+            --card-bg: #141420;
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+            background-size: 200% 200%;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* Button Styles */
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+            background-size: 200% 200%;
+            animation: gradient-shift 3s ease infinite;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
+        }
+        
+        .btn-gradient:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Card Styles */
+        .login-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 3rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Input Styles */
+        .input-field {
+            background: rgba(10, 10, 15, 0.5);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: #e0e0ff;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+        }
+        
+        .input-label {
+            color: #a0a0c0;
+            margin-bottom: 0.5rem;
+            display: block;
+            font-weight: 500;
+        }
+        
+        /* Logo Animation */
+        .logo-icon {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(0, 245, 255, 0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));
+            }
+        }
+        
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .alert-error {
+            background: rgba(255, 0, 110, 0.1);
+            border: 1px solid var(--pink);
+            color: var(--pink);
+        }
+        
+        .alert-success {
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+        }
+        
+        /* Demo Credentials Box */
+        .demo-box {
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-box:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.2);
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Background Glow */
+        .bg-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .bg-glow-1 {
+            top: -250px;
+            right: -250px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .bg-glow-2 {
+            bottom: -250px;
+            left: -250px;
+            animation: float 6s ease-in-out infinite;
+            animation-delay: 3s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-20px) scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Glows -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center gap-3">
+                    <svg class="w-10 h-10 logo-icon" viewBox="0 0 100 100" fill="none">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="45" stroke="url(#logoGradient)" stroke-width="4" fill="none"/>
+                        <path d="M50 20 L50 50 L70 50" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round"/>
+                    </svg>
+                    <span class="text-2xl font-bold gradient-text">YourMove</span>
+                </a>
+                <a href="/" class="text-gray-400 hover:text-cyan-400 transition flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <div class="min-h-screen flex items-center justify-center py-32 px-4 relative z-10">
+        <div class="max-w-md w-full">
+            <!-- Logo and Title -->
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-4xl font-bold gradient-text mb-2">Doctor Portal</h2>
+                <p class="text-gray-400">Sign in to access your dashboard</p>
+            </div>
+
+            <!-- Login Form -->
+            <div class="login-card">
+                <form id="loginForm" class="space-y-6">
+                    <!-- Alert Message -->
+                    <div id="alertMessage" class="hidden"></div>
+
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="input-label">Username</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            required
+                            class="input-field"
+                            placeholder="Enter your username"
+                        >
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="input-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required
+                            class="input-field"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+
+                    <!-- Remember Me -->
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center cursor-pointer">
+                            <input 
+                                id="remember" 
+                                type="checkbox" 
+                                class="w-4 h-4 rounded border-purple-400 text-cyan-400 focus:ring-cyan-400"
+                            >
+                            <span class="ml-2 text-sm text-gray-400">Remember me</span>
+                        </label>
+                        <a href="#" class="text-sm text-cyan-400 hover:text-cyan-300 transition">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        id="submitBtn"
+                        class="w-full btn-gradient text-white"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Demo Credentials -->
+                <div class="mt-6 demo-box" onclick="fillDemoCredentials()">
+                    <div class="flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="font-semibold text-purple-400">Demo Credentials</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Username: <span class="font-mono text-cyan-400">admin</span></p>
+                    <p class="text-sm text-gray-400">Password: <span class="font-mono text-cyan-400">admin123</span></p>
+                    <p class="text-xs text-gray-500 mt-2">Click here to auto-fill</p>
+                </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="mt-6 text-center text-sm text-gray-500 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <span>Secured with JWT authentication and HIPAA-compliant encryption</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Login form handling
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const alertMessage = document.getElementById('alertMessage');
+
+        function showAlert(message, isError = false) {
+            alertMessage.classList.remove('hidden', 'alert-error', 'alert-success');
+            alertMessage.classList.add('alert', isError ? 'alert-error' : 'alert-success');
+            alertMessage.textContent = message;
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = 'admin123';
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Disable button during request
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Store JWT token
+                    localStorage.setItem('jwt_token', data.access_token);
+                    
+                    showAlert('Login successful! Redirecting...', false);
+                    
+                    // Redirect to dashboard
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1000);
+                } else {
+                    showAlert(data.detail || 'Invalid username or password', true);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign In';
+                }
+            } catch (error) {
+                showAlert('Network error. Please check your connection and try again.', true);
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>
