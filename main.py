@@ -1,15 +1,4 @@
-"""
-YourMove VR Therapy Platform — Production Backend  v4.0
-═══════════════════════════════════════════════════════════════════════════════
-Enterprise-grade FastAPI server with:
-  • In-process token-bucket rate limiter (no external dependency)
-  • CORS restricted via environment variable
-  • GZip compression
-  • Structured JSON logging for AI decisions
-  • Full v4 analytics pipeline integrated
-  • Database-indexed queries
-  • /api/session/export  — session data export for PDF generation
-"""
+
 from __future__ import annotations
 
 import asyncio
@@ -383,10 +372,7 @@ async def api_login(
         )
     token = create_access_token({"sub": doctor.username}, timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     logger.info(f'"Login OK user={doctor.username}"')
-    return Token(
-        access_token=token,
-        token_type="bearer",
-)
+    return Token(access_token=token, token_type="bearer")
 
 
 # ── Me ────────────────────────────────────────────────────────────────────────
@@ -464,6 +450,20 @@ async def api_current(doctor: Doctor = Depends(get_current_doctor)):
     if not manager.current_data:
         return {"active": False}
     return {"active": True, "data": manager.current_data}
+
+
+@app.get("/api/session/latest")
+async def api_latest(doctor: Doctor = Depends(get_current_doctor)):
+    """
+    Returns the most recent sensor frame in the same shape as the WebSocket
+    sensor_update payload.  Used by the dashboard on page load so the UI
+    hydrates immediately without waiting for the next WS broadcast.
+    Returns 204 when no active session exists.
+    """
+    if not manager.current_data:
+        from fastapi.responses import Response
+        return Response(status_code=204)
+    return manager.current_data
 
 
 @app.get("/api/session/history")

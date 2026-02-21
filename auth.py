@@ -1,7 +1,4 @@
-"""
-Authentication & Authorization — JWT-based with bcrypt password hashing.
-SECRET_KEY MUST be set via the SECRET_KEY environment variable in production.
-"""
+
 from __future__ import annotations
 
 import os
@@ -19,7 +16,7 @@ from models import Doctor, get_db
 
 logger = logging.getLogger(__name__)
 
-# ── Config ────────────────────────────────────────────────────────────────────
+# Config 
 # IMPORTANT: set a strong SECRET_KEY environment variable before deploying.
 _DEFAULT_KEY = "CHANGE-ME-use-env-SECRET_KEY-in-production-min-32-chars!!"
 SECRET_KEY: str = os.environ.get("SECRET_KEY", _DEFAULT_KEY)

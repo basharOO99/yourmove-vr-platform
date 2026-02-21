@@ -3,112 +3,205 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YourMove — Clinician Access</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>YourMove — Clinician Access Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0e17;--p1:#141922;--p2:#1a2236;
-  --acc:#3b82f6;--acc2:#2563eb;
-  --crit:#dc2626;
-  --text:#f1f5f9;--t2:#94a3b8;--t3:#475569;
-  --bdr:rgba(255,255,255,.06);--bdr2:rgba(255,255,255,.10);
+  --cyan:#00F5FF;--purple:#8B5CF6;--pink:#FF006E;
+  --bg:#0B0F1A;--bg2:#141B2D;--bg3:#1C2436;
+  --text:#E6EDF7;--t2:#94A3B8;--t3:#4A5568;
+  --bdr:rgba(255,255,255,0.07);
+  --grad:linear-gradient(135deg,#00F5FF 0%,#8B5CF6 55%,#FF006E 100%);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-
-/* Subtle gradient bg */
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(59,130,246,.05) 0%,transparent 65%);pointer-events:none}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;flex-direction:column;
+}
+/* Subtle ambient */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 0%,rgba(0,245,255,.04) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 40% at 80% 100%,rgba(139,92,246,.04) 0%,transparent 55%);
+  pointer-events:none
+}
 
 /* Navbar */
-.navbar{background:var(--p1);border-bottom:1px solid var(--bdr);height:52px;display:flex;align-items:center;padding:0 24px}
-.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
-.logo-mark{width:28px;height:28px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);border-radius:7px;display:flex;align-items:center;justify-content:center}
-.logo-text{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.01em}
-.logo-sub{font-size:11px;color:var(--t3);border-left:1px solid var(--bdr);margin-left:8px;padding-left:8px}
+.navbar{background:var(--bg2);border-bottom:1px solid var(--bdr);height:54px;display:flex;align-items:center;padding:0 24px;position:relative;z-index:10}
+.nav-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.nav-wordmark{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.015em}
+.nav-wordmark span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-sub{font-size:10px;color:var(--t3);border-left:1px solid var(--bdr);margin-left:10px;padding-left:10px}
 
-/* Main */
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px;position:relative;z-index:1}
+/* Main layout */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 16px;position:relative;z-index:1}
+.login-wrap{width:100%;max-width:400px}
+
+/* Institution strip */
+.inst-strip{
+  border:1px solid var(--bdr);border-radius:6px;
+  background:var(--bg2);padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:24px
+}
+.inst-icon{
+  width:32px;height:32px;border-radius:6px;flex-shrink:0;
+  background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);
+  display:flex;align-items:center;justify-content:center
+}
 
 /* Card */
-.login-card{width:100%;max-width:380px;background:var(--p1);border:1px solid var(--bdr2);border-radius:8px;padding:32px}
+.card{
+  background:var(--bg2);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  padding:32px;
+  position:relative;
+  overflow:hidden
+}
+/* Gradient border top */
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--grad)
+}
 
-/* Form elements */
-.form-label{display:block;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3);margin-bottom:5px}
-.form-input{width:100%;padding:8px 12px;background:rgba(0,0,0,.25);border:1px solid var(--bdr2);border-radius:5px;font-size:14px;color:var(--text);outline:none;transition:border-color .15s,box-shadow .15s;font-family:'Inter',sans-serif}
-.form-input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
-.form-input::placeholder{color:var(--t3)}
-.btn-submit{width:100%;padding:9px 16px;background:var(--acc);color:#fff;border:none;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-submit:hover:not(:disabled){background:var(--acc2)}
-.btn-submit:disabled{opacity:.55;cursor:not-allowed}
+/* Header */
+.login-icon{
+  width:50px;height:50px;border-radius:12px;
+  background:rgba(0,245,255,.06);border:1px solid rgba(0,245,255,.15);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 16px
+}
+.card-title{font-size:20px;font-weight:700;letter-spacing:-.02em;text-align:center;margin-bottom:5px}
+.card-sub{font-size:13px;color:var(--t2);text-align:center;font-weight:300;line-height:1.5;margin-bottom:28px}
 
 /* Alert */
-.alert{padding:9px 12px;border-radius:4px;font-size:12px;margin-bottom:16px;display:none}
-.alert-error  {background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.25);color:#fca5a5;display:block}
-.alert-success{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#93c5fd;display:block}
+.alert{padding:10px 14px;border-radius:5px;font-size:12px;margin-bottom:20px;display:none;line-height:1.5}
+.alert-error{background:rgba(220,38,38,.09);border:1px solid rgba(220,38,38,.22);color:#fca5a5;display:block}
+.alert-success{background:rgba(0,245,255,.07);border:1px solid rgba(0,245,255,.18);color:var(--cyan);display:block}
+
+/* Form */
+.field{margin-bottom:18px}
+.label{display:block;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.input{
+  width:100%;padding:9px 12px;
+  background:rgba(0,0,0,.25);
+  border:1px solid var(--bdr);border-radius:5px;
+  font-size:14px;color:var(--text);
+  outline:none;transition:border-color .15s,box-shadow .15s;
+  font-family:'DM Sans',sans-serif
+}
+.input:focus{border-color:rgba(0,245,255,.35);box-shadow:0 0 0 3px rgba(0,245,255,.08)}
+.input::placeholder{color:var(--t3)}
+
+/* Submit button */
+.btn-submit{
+  width:100%;padding:10px 16px;
+  background:var(--grad);color:#000;
+  border:none;border-radius:5px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  transition:opacity .15s;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  margin-top:4px
+}
+.btn-submit:hover:not(:disabled){opacity:.88}
+.btn-submit:disabled{opacity:.45;cursor:not-allowed}
 
 /* Demo box */
-.demo-box{background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:5px;padding:10px 12px;cursor:pointer;transition:border-color .15s;margin-top:16px}
-.demo-box:hover{border-color:rgba(59,130,246,.35)}
+.demo-box{
+  margin-top:20px;padding:12px 14px;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--bdr);border-radius:5px;
+  cursor:pointer;transition:border-color .15s
+}
+.demo-box:hover{border-color:rgba(0,245,255,.22)}
+.demo-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.demo-creds{display:flex;gap:16px;font-size:12px;color:var(--t2);align-items:center;flex-wrap:wrap}
+.demo-val{font-family:'DM Mono',monospace;color:var(--cyan);font-size:12px}
+.demo-hint{font-size:10px;color:var(--t3);margin-top:4px}
 
-/* Security badges */
-.sec-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--t3)}
-.sec-dot{width:5px;height:5px;border-radius:50%;background:#16a34a}
+/* Trust row */
+.trust-row{display:flex;justify-content:center;gap:16px;margin-top:18px;flex-wrap:wrap}
+.trust-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3);font-weight:500}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:#10B981}
 
 /* Footer */
-footer{padding:18px 24px;border-top:1px solid var(--bdr);text-align:center}
+footer{padding:18px 24px;border-top:1px solid var(--bdr);background:var(--bg2);text-align:center;position:relative;z-index:1}
+.footer-note{font-size:11px;color:var(--t3)}
+.footer-link{color:var(--t3);text-decoration:none;transition:color .15s}
+.footer-link:hover{color:var(--t2)}
 </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <nav class="navbar">
-  <a class="logo" href="/">
-    <div class="logo-mark">
-      <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
-        <path d="M16 4l5 10H28l-8 7 3 11-8-5-8 5 3-11-8-7h7z" fill="#3b82f6"/>
-      </svg>
+  <a class="nav-logo" href="/">
+    <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+      <defs><linearGradient id="ln-lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00F5FF"/><stop offset="55%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#FF006E"/></linearGradient></defs>
+      <rect width="40" height="40" rx="9" fill="url(#ln-lg)" fill-opacity=".1"/>
+      <rect x="7" y="13" width="26" height="14" rx="4.5" stroke="url(#ln-lg)" stroke-width="1.8" fill="none"/>
+      <circle cx="15" cy="20" r="3.2" fill="url(#ln-lg)" fill-opacity=".45"/>
+      <circle cx="25" cy="20" r="3.2" fill="url(#ln-lg)" fill-opacity=".45"/>
+      <line x1="20" y1="8" x2="20" y2="13" stroke="url(#ln-lg)" stroke-width="1.6"/>
+      <circle cx="20" cy="7" r="2" fill="url(#ln-lg)"/>
+    </svg>
+    <div>
+      <div class="nav-wordmark">Your<span>Move</span></div>
     </div>
-    <div class="logo-text">YourMove</div>
-    <div class="logo-sub hidden sm:block">Clinical Analytics</div>
+    <div class="nav-sub">Clinical Analytics Platform</div>
   </a>
 </nav>
 
-<!-- Main -->
 <main>
-  <div style="width:100%;max-width:380px">
+  <div class="login-wrap">
 
-    <!-- Header -->
-    <div class="mb-6 text-center">
-      <div style="width:48px;height:48px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-        <svg width="22" height="22" fill="none" stroke="#3b82f6" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+    <!-- Institution strip -->
+    <div class="inst-strip">
+      <div class="inst-icon">
+        <svg width="15" height="15" fill="none" stroke="#8B5CF6" stroke-width="1.7" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
         </svg>
       </div>
-      <h1 style="font-size:20px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px">Clinician Access</h1>
-      <p style="font-size:13px;color:var(--t3)">Sign in to access the clinical dashboard</p>
+      <div>
+        <div style="font-size:12px;font-weight:500;color:var(--text)">Software Engineering Department</div>
+        <div style="font-size:10px;color:var(--t3);margin-top:1px">ASD &amp; ADHD VR Therapy Research &mdash; 2025&ndash;2026</div>
+      </div>
     </div>
 
-    <!-- Card -->
-    <div class="login-card">
+    <!-- Login card -->
+    <div class="card">
+
+      <!-- Icon -->
+      <div class="login-icon">
+        <svg width="22" height="22" fill="none" stroke="#00F5FF" stroke-width="1.7" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+      </div>
+
+      <div class="card-title">Clinician Access Portal</div>
+      <div class="card-sub">Secure login for authorized therapists and supervisors.</div>
+
       <!-- Alert -->
       <div id="alertMsg" class="alert"></div>
 
       <!-- Form -->
       <form id="loginForm">
-        <div style="margin-bottom:14px">
-          <label for="username" class="form-label">Username</label>
+        <div class="field">
+          <label for="username" class="label">Username</label>
           <input type="text" id="username" required autocomplete="username"
-                 placeholder="Enter username" class="form-input">
+                 placeholder="Enter username" class="input">
         </div>
-        <div style="margin-bottom:20px">
-          <label for="password" class="form-label">Password</label>
+        <div class="field" style="margin-bottom:24px">
+          <label for="password" class="label">Password</label>
           <input type="password" id="password" required autocomplete="current-password"
-                 placeholder="Enter password" class="form-input">
+                 placeholder="Enter password" class="input">
         </div>
         <button type="submit" id="submitBtn" class="btn-submit">
-          <svg id="btnIcon" width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+          <svg id="btnIcon" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
           </svg>
           <span id="btnText">Sign In</span>
         </button>
@@ -116,38 +209,37 @@ footer{padding:18px 24px;border-top:1px solid var(--bdr);text-align:center}
 
       <!-- Demo credentials -->
       <div class="demo-box" onclick="fillDemo()">
-        <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:4px">Evaluation credentials</div>
-        <div style="font-size:12px;color:var(--t3)">
-          Username: <span style="font-family:monospace;color:var(--acc)">admin</span>
-          &nbsp;·&nbsp;
-          Password: <span style="font-family:monospace;color:var(--acc)">admin123</span>
+        <div class="demo-label">Evaluation Credentials</div>
+        <div class="demo-creds">
+          <span>Username: <span class="demo-val">admin</span></span>
+          <span>Password: <span class="demo-val">admin123</span></span>
         </div>
-        <div style="font-size:10px;color:var(--t3);margin-top:3px">Click to auto-fill</div>
+        <div class="demo-hint">Click to auto-fill</div>
       </div>
     </div>
 
-    <!-- Security indicators -->
-    <div style="display:flex;justify-content:center;gap:16px;margin-top:14px">
-      <div class="sec-badge"><div class="sec-dot"></div>JWT Auth</div>
-      <div class="sec-badge"><div class="sec-dot"></div>bcrypt</div>
-      <div class="sec-badge"><div class="sec-dot"></div>Rate Limited</div>
-      <div class="sec-badge"><div class="sec-dot"></div>8h Session</div>
+    <!-- Trust indicators -->
+    <div class="trust-row">
+      <div class="trust-item"><div class="trust-dot"></div>JWT Authentication</div>
+      <div class="trust-item"><div class="trust-dot"></div>bcrypt hashing</div>
+      <div class="trust-item"><div class="trust-dot"></div>Rate limited</div>
+      <div class="trust-item"><div class="trust-dot"></div>8h session</div>
     </div>
+
   </div>
 </main>
 
-<!-- Footer -->
 <footer>
-  <div style="font-size:11px;color:var(--t3)">
-    YourMove Clinical Platform v4.0 &nbsp;·&nbsp;
-    <a href="/" style="color:var(--t3);text-decoration:none" onmouseover="this.style.color='var(--t2)'" onmouseout="this.style.color='var(--t3)'">Return to home</a>
+  <div class="footer-note">
+    YourMove Clinical Platform v4.0 &nbsp;&middot;&nbsp;
+    <a href="/" class="footer-link">Return to project overview</a>
   </div>
 </footer>
 
 <script>
 function showAlert(msg, type) {
   const el = document.getElementById('alertMsg');
-  el.className = `alert alert-${type}`;
+  el.className = 'alert alert-' + type;
   el.textContent = msg;
 }
 
@@ -156,6 +248,9 @@ function fillDemo() {
   document.getElementById('password').value = 'admin123';
   document.getElementById('username').focus();
 }
+
+const SPIN_SVG = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+const ARROW_SVG = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>';
 
 document.getElementById('loginForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -166,8 +261,8 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
   const pass = document.getElementById('password').value;
 
   btn.disabled = true;
-  txt.textContent = 'Authenticating…';
-  icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>';
+  txt.textContent = 'Authenticating\u2026';
+  icon.innerHTML = SPIN_SVG;
 
   try {
     const r = await fetch('/api/auth/login', {
@@ -179,26 +274,26 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 
     if (r.ok) {
       localStorage.setItem('jwt_token', data.access_token);
-      showAlert('Authentication successful — redirecting…', 'success');
-      txt.textContent = 'Redirecting…';
-      setTimeout(() => { window.location.href = '/dashboard'; }, 800);
+      showAlert('Authentication successful \u2014 redirecting\u2026', 'success');
+      txt.textContent = 'Redirecting\u2026';
+      setTimeout(() => { window.location.href = '/dashboard'; }, 750);
     } else if (r.status === 429) {
       showAlert('Too many attempts. Please wait 60 seconds before retrying.', 'error');
-      btn.disabled = true;
       txt.textContent = 'Rate limited';
-      setTimeout(() => { btn.disabled = false; txt.textContent = 'Sign In'; }, 60000);
+      setTimeout(() => { btn.disabled = false; txt.textContent = 'Sign In'; icon.innerHTML = ARROW_SVG; }, 60000);
     } else {
       showAlert(data.detail || 'Invalid username or password.', 'error');
-      btn.disabled    = false;
+      btn.disabled = false;
       txt.textContent = 'Sign In';
-      icon.innerHTML  = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>';
+      icon.innerHTML = ARROW_SVG;
       document.getElementById('password').value = '';
       document.getElementById('password').focus();
     }
-  } catch (err) {
-    showAlert('Network error — check your connection.', 'error');
-    btn.disabled    = false;
+  } catch {
+    showAlert('Network error \u2014 check your connection and try again.', 'error');
+    btn.disabled = false;
     txt.textContent = 'Sign In';
+    icon.innerHTML = ARROW_SVG;
   }
 });
 </script>

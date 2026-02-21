@@ -1,12 +1,4 @@
-"""
-YourMove — AI Analysis Orchestrator  v4.0
-═══════════════════════════════════════════════════════════════════════════════
-Coordinates data_processing, anomaly_detection, and predictive_model to
-produce a complete clinical analytics payload from each VR sensor frame.
 
-Structured JSON logging records every AI decision for clinical audit trails
-in accordance with GDPR / medical device documentation requirements.
-"""
 from __future__ import annotations
 
 import json
@@ -22,7 +14,7 @@ from data_processing import SensorProcessor, compute_trend_slope
 from predictive_model import GlobalPrediction, StressPredictor, StressPrediction
 
 
-# ── Structured AI audit logger ────────────────────────────────────────────────
+# Structured AI audit logger
 _ai_logger = logging.getLogger("yourmove.ai")
 
 
@@ -37,9 +29,8 @@ def _log_decision(event: str, payload: dict) -> None:
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Clinical body-part display names
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 BODY_PART_NAMES: Dict[str, str] = {
     "head":            "Head / Cranium",
@@ -57,9 +48,9 @@ BODY_PART_NAMES: Dict[str, str] = {
     "right_lower_leg": "R. Distal Leg",
 }
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Clinical action map
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 _CLINICAL_ACTIONS: Dict[str, str] = {
     "continue":          "Continue current protocol. All metrics within normal range.",
@@ -73,9 +64,9 @@ _CLINICAL_ACTIONS: Dict[str, str] = {
 _SEVERITY_ORDER = {"critical": 4, "high": 3, "moderate": 2, "low": 1}
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # MovementAnalyzer — main entry point
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 class MovementAnalyzer:
     """
@@ -109,7 +100,7 @@ class MovementAnalyzer:
         self._frame_count     = 0
         self._escalation:     int = 0   # 0–3
 
-    # ── Primary entry point ───────────────────────────────────────────────────
+    # ── Primary entry point 
 
     def analyze_movement(self, data: VRSensorInput) -> AICommand:
         """
@@ -121,13 +112,13 @@ class MovementAnalyzer:
         focus   = data.global_metrics.hmd_eye_dot_product
         ts      = time.time()
 
-        # ── Step 1: Update processors ──────────────────────────────────────
+        # ── Step 1: Update processors 
         for name, raw in sensors.items():
             proc = self._processors.get(name)
             if proc:
                 proc.update(raw["stress_trend"], raw["tremor_intensity"], ts)
 
-        # ── Step 2: Focus check (global override) ──────────────────────────
+        # ── Step 2: Focus check (global override)
         if focus < self.FOCUS_CRITICAL:
             self._escalation = min(3, self._escalation + 1)
             cmd = AICommand(
@@ -149,10 +140,10 @@ class MovementAnalyzer:
             _log_decision("ai_command", {"command": cmd.command, "severity": cmd.severity, "trigger": "focus_low", "focus": focus})
             return cmd
 
-        # ── Step 3: Anomaly detection ──────────────────────────────────────
+        # ── Step 3: Anomaly detection 
         anomalies = self._anomaly_engine.run(sensors, self._processors)
 
-        # ── Step 4: Command selection based on anomalies ───────────────────
+        # ── Step 4: Command selection based on anomalies 
         if anomalies:
             top = anomalies[0]
             if top.severity == "critical":
@@ -208,7 +199,7 @@ class MovementAnalyzer:
 
         return cmd
 
-    # ── Body map status ───────────────────────────────────────────────────────
+    # ── Body map status 
 
     def get_body_part_status(self, data: VRSensorInput) -> Dict[str, dict]:
         sensors = data.sensors.model_dump()
@@ -254,7 +245,7 @@ class MovementAnalyzer:
             }
         return status
 
-    # ── Global stats ──────────────────────────────────────────────────────────
+    # Global stats 
 
     def get_global_stats(self, data: VRSensorInput) -> Dict[str, float]:
         sensors = data.sensors.model_dump()
@@ -268,7 +259,7 @@ class MovementAnalyzer:
             "focus_level": round(data.global_metrics.hmd_eye_dot_product, 3),
         }
 
-    # ── Full advanced analytics payload ───────────────────────────────────────
+    # Full advanced analytics payload 
 
     def get_advanced_analytics(self, data: VRSensorInput) -> Dict[str, Any]:
         """
@@ -282,14 +273,14 @@ class MovementAnalyzer:
         max_tremor = gs["max_tremor"]
         avg_stress = gs["avg_stress"]
 
-        # ── Stability Index (0-100) ────────────────────────────────────────
+        # ── Stability Index (0-100) 
         # Composite: focus (35%) + stress deviation from calm (40%) + tremor (25%)
         focus_sc  = focus * 35.0
         stress_sc = max(0.0, 40.0 * (1.0 - avg_stress / 20.0))
         tremor_sc = max(0.0, 25.0 * (1.0 - max_tremor / 10.0))
         stability = round(min(100.0, max(0.0, focus_sc + stress_sc + tremor_sc)), 1)
 
-        # ── Risk Classification ────────────────────────────────────────────
+        # ── Risk Classification 
         if focus < self.FOCUS_CRITICAL or max_stress > 18.0 or max_tremor > 8.0:
             risk = "CRITICAL"
         elif focus < self.FOCUS_LOW or max_stress >= self.STRESS_CRITICAL or max_tremor >= self.TREMOR_SEVERE:
@@ -299,17 +290,17 @@ class MovementAnalyzer:
         else:
             risk = "LOW"
 
-        # ── Confidence Score ───────────────────────────────────────────────
+        # Confidence Score 
         avg_qual     = sum(p.signal_quality().overall for p in self._processors.values()) / len(self._processors)
         signal_boost = min(0.3, (max_stress / 20.0 + max_tremor / 10.0) * 0.15)
         confidence   = round(min(0.97, avg_qual * 0.7 + signal_boost), 3)
 
-        # ── Anomalies (lightweight re-run without side effects) ───────────
+        # Anomalies (lightweight re-run without side effects) 
         sensors      = data.sensors.model_dump()
         anomalies    = self._anomaly_engine.run(sensors, self._processors)
         anomaly_list = [e.to_dict() for e in anomalies[:5]]
 
-        # ── Trend analysis ─────────────────────────────────────────────────
+        #  Trend analysis 
         # Use global stress buffer (aggregate across all processors)
         recent_stresses = [proc.stress_buf.last(10) for proc in self._processors.values()]
         all_recent = [s for buf in recent_stresses for s in buf]
@@ -321,12 +312,12 @@ class MovementAnalyzer:
         else:
             trend_direction = "stable"
 
-        # ── Predictive model (120s) ────────────────────────────────────────
+        #  Predictive model (120s)
         pred_global = self._predictor.predict_global(self._processors, 120)
         pred_60     = self._predictor.predict_global(self._processors, 60)
         pred_30     = self._predictor.predict_global(self._processors, 30)
 
-        # ── Top Affected Regions ───────────────────────────────────────────
+        # Top Affected Regions 
         region_scores: List[Dict] = []
         for name, proc in self._processors.items():
             composite = (proc.ema_stress / 20.0) * 60 + (proc.ema_tremor / 10.0) * 40
@@ -342,7 +333,7 @@ class MovementAnalyzer:
             })
         top_regions = sorted(region_scores, key=lambda x: -x["score"])[:5]
 
-        # ── Session Summary ────────────────────────────────────────────────
+        # Session Summary 
         duration_s  = round(time.time() - self._session_start, 1)
         summary     = self._generate_summary(risk, stability, trend_direction,
                                               max_stress, max_tremor, focus,
@@ -368,7 +359,7 @@ class MovementAnalyzer:
             "clinical_action":      self._clinical_action(risk),
         }
 
-    # ── Session summary generator ─────────────────────────────────────────────
+    # Session summary generator 
 
     def _generate_summary(
         self,

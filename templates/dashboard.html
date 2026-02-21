@@ -7,33 +7,47 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ── Reset & root ─────────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:    #0a0e17;
-  --p1:    #141922;
-  --p2:    #1a2236;
-  --p3:    #1e2840;
-  --acc:   #3b82f6;
-  --acc2:  #2563eb;
-  --crit:  #dc2626;
-  --high:  #d97706;
-  --mod:   #2563eb;
-  --low:   #16a34a;
-  --safe:  #0ea5e9;
-  --text:  #f1f5f9;
-  --t2:    #94a3b8;
-  --t3:    #475569;
-  --bdr:   rgba(255,255,255,0.055);
-  --bdr2:  rgba(255,255,255,0.10);
-  --shadow:0 1px 3px rgba(0,0,0,.4);
+  /* ─ Brand ─ */
+  --cyan:   #00F5FF;
+  --purple: #8B5CF6;
+  --pink:   #FF006E;
+  /* ─ Backgrounds ─ */
+  --bg:     #0B0F1A;
+  --p1:     #141B2D;
+  --p2:     #1C2436;
+  --p3:     #222d42;
+  /* ─ Accent ─ */
+  --acc:    #00F5FF;
+  --acc2:   #00c8d4;
+  /* ─ Risk ─ */
+  --crit:   #DC2626;
+  --high:   #EF4444;
+  --amber:  #F59E0B;
+  --mod:    #8B5CF6;
+  --low:    #10B981;
+  --safe:   #00F5FF;
+  /* ─ Text ─ */
+  --text:   #E6EDF7;
+  --t2:     #94A3B8;
+  --t3:     #4A5568;
+  /* ─ Borders ─ */
+  --bdr:    rgba(255,255,255,0.07);
+  --bdr2:   rgba(0,245,255,0.18);
+  --shadow: 0 1px 3px rgba(0,0,0,.5);
+  /* ─ Gradients ─ */
+  --grad-brand: linear-gradient(135deg,#00F5FF 0%,#8B5CF6 55%,#FF006E 100%);
+  --grad-cyan:  linear-gradient(135deg,#00F5FF,#8B5CF6);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5;min-height:100vh}
+.mono{font-family:'DM Mono',monospace!important}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--p1)}
-::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+::-webkit-scrollbar-thumb{background:rgba(0,245,255,.2);border-radius:2px}
 
 /* ── Layout primitives ──────────────────────────────────────── */
 .panel{background:var(--p1);border:1px solid var(--bdr);border-radius:6px}
@@ -52,19 +66,19 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .tabbar{background:var(--p1);border-bottom:1px solid var(--bdr);padding:0 16px}
 .tab-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;font-size:12px;font-weight:500;color:var(--t3);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s}
 .tab-btn:hover{color:var(--t2)}
-.tab-active{color:var(--acc)!important;border-bottom-color:var(--acc)!important}
+.tab-active{color:var(--cyan)!important;border-bottom-color:var(--cyan)!important}
 
 /* ── Buttons ─────────────────────────────────────────────────── */
-.btn-primary{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--acc);color:#fff;border:none;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;transition:background .15s}
-.btn-primary:hover{background:var(--acc2)}
-.btn-secondary{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:transparent;color:var(--t2);border:1px solid var(--bdr2);border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;transition:border-color .15s,color .15s}
-.btn-secondary:hover{color:var(--text);border-color:var(--acc)}
-.btn-danger{padding:5px 12px;background:rgba(220,38,38,.12);color:#f87171;border:1px solid rgba(220,38,38,.25);border-radius:4px;font-size:11px;cursor:pointer;transition:all .15s}
-.btn-danger:hover{background:rgba(220,38,38,.22)}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:var(--grad-cyan);color:#000;border:none;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn-primary:hover{opacity:.88}
+.btn-secondary{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:transparent;color:var(--t2);border:1px solid var(--bdr);border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;transition:border-color .15s,color .15s}
+.btn-secondary:hover{color:var(--cyan);border-color:rgba(0,245,255,.35)}
+.btn-danger{padding:5px 12px;background:rgba(220,38,38,.1);color:#fca5a5;border:1px solid rgba(220,38,38,.22);border-radius:4px;font-size:11px;cursor:pointer;transition:all .15s}
+.btn-danger:hover{background:rgba(220,38,38,.2)}
 
 /* ── Section labels ──────────────────────────────────────────── */
 .section-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3)}
-.section-label-acc{color:var(--acc)}
+.section-label-acc{color:var(--cyan)}
 
 /* ── Metric cards ────────────────────────────────────────────── */
 .metric-card{padding:10px 12px;display:flex;flex-direction:column;gap:3px}
@@ -78,30 +92,30 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 /* ── Status / Risk badges ────────────────────────────────────── */
 .badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .b-critical{background:rgba(220,38,38,.15);color:#fca5a5;border:1px solid rgba(220,38,38,.3)}
-.b-high    {background:rgba(217,119,6,.14); color:#fcd34d;border:1px solid rgba(217,119,6,.3)}
-.b-moderate{background:rgba(37,99,235,.14); color:#93c5fd;border:1px solid rgba(37,99,235,.3)}
-.b-low     {background:rgba(22,163,74,.14); color:#86efac;border:1px solid rgba(22,163,74,.3)}
+.b-high    {background:rgba(239,68,68,.13); color:#fda4af;border:1px solid rgba(239,68,68,.28)}
+.b-moderate{background:rgba(139,92,246,.13);color:#c4b5fd;border:1px solid rgba(139,92,246,.28)}
+.b-low     {background:rgba(16,185,129,.13);color:#6ee7b7;border:1px solid rgba(16,185,129,.28)}
 
 .risk-CRITICAL{background:rgba(220,38,38,.18);color:#f87171;border:1px solid rgba(220,38,38,.4);font-size:11px;padding:3px 10px;animation:pulse-risk 1.4s ease-in-out infinite}
-.risk-HIGH    {background:rgba(217,119,6,.16); color:#fbbf24;border:1px solid rgba(217,119,6,.35)}
-.risk-MODERATE{background:rgba(37,99,235,.14); color:#60a5fa;border:1px solid rgba(37,99,235,.3)}
-.risk-LOW     {background:rgba(22,163,74,.14); color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+.risk-HIGH    {background:rgba(239,68,68,.15); color:#fca5a5;border:1px solid rgba(239,68,68,.35)}
+.risk-MODERATE{background:rgba(139,92,246,.14);color:#c4b5fd;border:1px solid rgba(139,92,246,.3)}
+.risk-LOW     {background:rgba(16,185,129,.13);color:#6ee7b7;border:1px solid rgba(16,185,129,.3)}
 @keyframes pulse-risk{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.3)}50%{box-shadow:0 0 0 5px rgba(220,38,38,0)}}
 
 /* ── Connection indicator ────────────────────────────────────── */
 .cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.cdot-on {background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.6);animation:blink-c 2.5s ease-in-out infinite}
+.cdot-on {background:#00F5FF;box-shadow:0 0 5px rgba(0,245,255,.5);animation:blink-c 2.5s ease-in-out infinite}
 .cdot-off{background:var(--t3)}
 @keyframes blink-c{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* ── Body map segments ───────────────────────────────────────── */
 #mapSvg .seg{cursor:pointer;transition:fill .35s ease,filter .35s ease}
-.s-normal  {fill:#1e3a4a}
-.s-mild    {fill:#1d4038}
-.s-elevated{fill:#3d3010}
-.s-warning {fill:#4a2210}
-.s-critical{fill:#4a0e0e;animation:crit-pulse .8s ease-in-out infinite alternate}
-@keyframes crit-pulse{from{filter:brightness(1)}to{filter:brightness(1.6)}}
+.s-normal  {fill:#0d2233}
+.s-mild    {fill:#0c3322}
+.s-elevated{fill:#332b08}
+.s-warning {fill:#3d1a08}
+.s-critical{fill:#3d0808;animation:crit-pulse .8s ease-in-out infinite alternate}
+@keyframes crit-pulse{from{filter:brightness(1)}to{filter:brightness(1.7) saturate(1.3)}}
 #mapSvg .seg:hover{opacity:.7}
 
 /* ── Stability gauge ─────────────────────────────────────────── */
@@ -125,8 +139,8 @@ td{font-size:12px;padding:5px 8px;border-bottom:1px solid rgba(255,255,255,.03)}
 tr:hover td{background:rgba(255,255,255,.014)}
 
 /* ── Form inputs ─────────────────────────────────────────────── */
-.form-input{width:100%;padding:6px 10px;background:rgba(0,0,0,.3);border:1px solid var(--bdr2);border-radius:4px;font-size:12px;color:var(--text);outline:none;transition:border-color .15s;font-family:'Inter',sans-serif}
-.form-input:focus{border-color:var(--acc);box-shadow:0 0 0 2px rgba(59,130,246,.12)}
+.form-input{width:100%;padding:6px 10px;background:rgba(0,0,0,.3);border:1px solid var(--bdr);border-radius:4px;font-size:12px;color:var(--text);outline:none;transition:border-color .15s;font-family:'DM Sans',sans-serif}
+.form-input:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,245,255,.10)}
 .form-input::placeholder{color:var(--t3)}
 .form-label{display:block;font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--t3);margin-bottom:4px}
 
@@ -135,7 +149,7 @@ tr:hover td{background:rgba(255,255,255,.014)}
 
 /* ── Prediction bars ─────────────────────────────────────────── */
 .pred-bar-bg{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;margin-top:3px}
-.pred-bar   {height:100%;border-radius:2px;background:var(--acc);transition:width .5s}
+.pred-bar   {height:100%;border-radius:2px;background:var(--cyan);transition:width .5s}
 
 /* ── Empty states ────────────────────────────────────────────── */
 .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 12px;color:var(--t3);gap:6px;text-align:center}
@@ -144,11 +158,11 @@ tr:hover td{background:rgba(255,255,255,.014)}
 
 /* ── Region rank ─────────────────────────────────────────────── */
 .region-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:2px}
-.region-fill{height:100%;border-radius:2px;transition:width .5s ease;background:var(--acc)}
+.region-fill{height:100%;border-radius:2px;transition:width .5s ease;background:var(--cyan)}
 
 /* ── Trend arrows ────────────────────────────────────────────── */
-.t-up{color:#ef4444;font-size:10px;font-weight:700}
-.t-dn{color:#22c55e;font-size:10px;font-weight:700}
+.t-up{color:#EF4444;font-size:10px;font-weight:700}
+.t-dn{color:#10B981;font-size:10px;font-weight:700}
 .t-st{color:var(--t3);font-size:10px}
 
 /* ═══════════════════════════════════════════════════════
@@ -179,9 +193,24 @@ tr:hover td{background:rgba(255,255,255,.014)}
   <div class="nav-inner">
     <div class="flex items-center gap-5">
       <a class="nav-brand" href="/">
-        <svg width="22" height="22" viewBox="0 0 32 32" fill="none">
-          <rect width="32" height="32" rx="6" fill="#3b82f6" fill-opacity=".15"/>
-          <path d="M16 6l4.5 9H28l-7 6.5L24 29l-8-5-8 5 2.5-7.5L2 15h7.5L16 6z" fill="#3b82f6"/>
+        <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+          <defs>
+            <linearGradient id="db-lg" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%"   stop-color="#00F5FF"/>
+              <stop offset="55%"  stop-color="#8B5CF6"/>
+              <stop offset="100%" stop-color="#FF006E"/>
+            </linearGradient>
+          </defs>
+          <rect width="36" height="36" rx="8" fill="url(#db-lg)" fill-opacity=".12"/>
+          <rect x="7" y="12" width="22" height="13" rx="4" stroke="url(#db-lg)" stroke-width="1.6" fill="none"/>
+          <circle cx="14" cy="18" r="2.8" fill="url(#db-lg)" fill-opacity=".5"/>
+          <circle cx="22" cy="18" r="2.8" fill="url(#db-lg)" fill-opacity=".5"/>
+          <line x1="18" y1="9" x2="18" y2="12" stroke="url(#db-lg)" stroke-width="1.4"/>
+          <circle cx="18" cy="8" r="1.6" fill="url(#db-lg)"/>
+          <line x1="29" y1="15" x2="32" y2="15" stroke="url(#db-lg)" stroke-width="1.3"/>
+          <line x1="29" y1="21" x2="32" y2="21" stroke="url(#db-lg)" stroke-width="1.3"/>
+          <line x1="4" y1="15" x2="7" y2="15" stroke="url(#db-lg)" stroke-width="1.3"/>
+          <line x1="4" y1="21" x2="7" y2="21" stroke="url(#db-lg)" stroke-width="1.3"/>
         </svg>
         <div>
           <div class="nav-brand-text">YourMove</div>
@@ -260,10 +289,10 @@ tr:hover td{background:rgba(255,255,255,.014)}
     <div class="panel metric-card">
       <div class="section-label">Focus Index</div>
       <div class="flex items-end gap-2">
-        <div class="metric-val mono" id="mFocus" style="color:var(--safe)">—</div>
+        <div class="metric-val mono" id="mFocus" style="color:var(--cyan)">—</div>
         <div id="dFocus" class="metric-delta delta-stable mb-0.5">—</div>
       </div>
-      <div class="metric-bar"><div class="metric-fill" id="bFocus" style="width:0%;background:var(--safe)"></div></div>
+      <div class="metric-bar"><div class="metric-fill" id="bFocus" style="width:0%;background:var(--cyan)"></div></div>
     </div>
     <div class="panel metric-card">
       <div class="section-label">Max Arousal</div>
@@ -291,8 +320,8 @@ tr:hover td{background:rgba(255,255,255,.014)}
     </div>
     <div class="panel metric-card">
       <div class="section-label">AI Confidence</div>
-      <div class="metric-val mono" id="mConf" style="color:var(--acc)">—</div>
-      <div class="metric-bar"><div class="metric-fill" id="bConf" style="width:0%;background:var(--acc)"></div></div>
+      <div class="metric-val mono" id="mConf" style="color:var(--cyan)">—</div>
+      <div class="metric-bar"><div class="metric-fill" id="bConf" style="width:0%;background:var(--cyan)"></div></div>
       <div class="metric-lbl" id="mConfLabel">Insufficient data</div>
     </div>
   </div>
@@ -371,7 +400,7 @@ tr:hover td{background:rgba(255,255,255,.014)}
           <svg width="92" height="92" viewBox="0 0 110 110">
             <circle cx="55" cy="55" r="46" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="9"/>
             <circle id="stabArc" cx="55" cy="55" r="46" fill="none"
-                    stroke="#3b82f6" stroke-width="9" stroke-linecap="butt"
+                    stroke="#00F5FF" stroke-width="9" stroke-linecap="butt"
                     stroke-dasharray="289" stroke-dashoffset="289"/>
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center">
@@ -387,9 +416,9 @@ tr:hover td{background:rgba(255,255,255,.014)}
           <div>
             <div class="flex justify-between mb-1">
               <span class="section-label">AI Confidence</span>
-              <span id="confPct" class="mono text-xs" style="color:var(--acc)">—</span>
+              <span id="confPct" class="mono text-xs" style="color:var(--cyan)">—</span>
             </div>
-            <div class="metric-bar" style="height:3px"><div class="metric-fill" id="bigConfBar" style="width:0%;background:var(--acc)"></div></div>
+            <div class="metric-bar" style="height:3px"><div class="metric-fill" id="bigConfBar" style="width:0%;background:var(--cyan)"></div></div>
           </div>
           <div class="flex gap-3 pt-1" style="border-top:1px solid var(--bdr)">
             <div>
@@ -446,26 +475,28 @@ tr:hover td{background:rgba(255,255,255,.014)}
         <div class="grid grid-cols-2 gap-x-4 gap-y-1.5">
           <div><div class="section-label" style="font-size:9px">Patient ID</div><div class="text-xs mono font-medium" id="infoPatient" style="color:var(--t2)">—</div></div>
           <div><div class="section-label" style="font-size:9px">Session ID</div><div class="text-xs mono truncate" id="infoSession" style="color:var(--t2)">—</div></div>
-          <div><div class="section-label" style="font-size:9px">Duration</div><div class="text-xs mono font-bold" id="infoDuration" style="color:var(--acc)">—</div></div>
+          <div><div class="section-label" style="font-size:9px">Duration</div><div class="text-xs mono font-bold" id="infoDuration" style="color:var(--cyan)">—</div></div>
           <div><div class="section-label" style="font-size:9px">Frames</div><div class="text-xs mono" id="infoFrames" style="color:var(--t3)">—</div></div>
         </div>
       </div>
     </div>
 
-    <!-- AI Command Feed + Top Regions (5 cols) -->
+    <!-- AI Current Command + Top Regions (5 cols) -->
     <div class="xl:col-span-5 flex flex-col gap-2">
 
-      <!-- AI command log -->
-      <div class="panel p-3 flex flex-col" style="flex:1">
+      <!-- Current AI Command (replaces log) -->
+      <div class="panel p-3">
         <div class="flex items-center justify-between mb-2">
-          <div class="section-label">AI Command Log</div>
-          <span id="aiCount" class="text-xs" style="color:var(--t3)">0 events</span>
+          <div class="section-label">Current AI Command</div>
+          <span id="aiLastTs" class="mono" style="font-size:9px;color:var(--t3)"></span>
         </div>
-        <div id="aiList" class="flex flex-col gap-1.5 overflow-y-auto" style="max-height:180px">
-          <div class="empty" id="aiEmpty">
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#475569" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <p>No events — awaiting session</p>
+        <!-- Command card -->
+        <div id="aiCmdCard" style="border:1px solid var(--bdr);border-radius:5px;padding:10px 12px;background:rgba(0,0,0,.2)">
+          <div class="flex items-center gap-2 mb-1">
+            <span id="aiCmdBadge" class="badge b-low">low</span>
+            <span id="aiCmdName" class="text-sm font-semibold" style="color:var(--text)">Awaiting session…</span>
           </div>
+          <div id="aiCmdReason" class="text-xs leading-relaxed" style="color:var(--t3)">No active session. Connect UE5 to begin receiving commands.</div>
         </div>
       </div>
 
@@ -504,10 +535,10 @@ tr:hover td{background:rgba(255,255,255,.014)}
         </div>
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-1.5">
-            <div style="width:14px;height:2px;background:#3b82f6"></div>
+            <div style="width:14px;height:2px;background:#00F5FF"></div>
             <span class="text-xs" style="color:var(--t3)">Live</span>
           </div>
-          <div id="focusLast" class="mono text-xs font-bold" style="color:var(--acc)">—</div>
+          <div id="focusLast" class="mono text-xs font-bold" style="color:var(--cyan)">—</div>
         </div>
       </div>
       <div class="chart-wrap"><canvas id="focusChart"></canvas></div>
@@ -572,11 +603,11 @@ tr:hover td{background:rgba(255,255,255,.014)}
   <div id="cmpCards" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
     <div class="panel metric-card">
       <div class="section-label">Avg Focus — A</div>
-      <div class="metric-val mono" id="cmpFocA" style="color:var(--acc)">—</div>
+      <div class="metric-val mono" id="cmpFocA" style="color:var(--cyan)">—</div>
     </div>
     <div class="panel metric-card">
       <div class="section-label">Avg Focus — B</div>
-      <div class="metric-val mono" id="cmpFocB" style="color:var(--acc)">—</div>
+      <div class="metric-val mono" id="cmpFocB" style="color:var(--cyan)">—</div>
     </div>
     <div class="panel metric-card">
       <div class="section-label">Peak Stress — A</div>
@@ -610,7 +641,7 @@ tr:hover td{background:rgba(255,255,255,.014)}
       <div class="flex items-center justify-between mb-2">
         <div class="section-label section-label-acc">Focus Index — Session Overlay</div>
         <div class="flex gap-3 text-xs">
-          <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:#3b82f6;display:inline-block"></span>Session A</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:#00F5FF;display:inline-block"></span>Session A</span>
           <span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:2px;background:#f59e0b;display:inline-block"></span>Session B</span>
         </div>
       </div>
@@ -734,11 +765,15 @@ const token = localStorage.getItem('jwt_token');
 if (!token) location.href = '/login';
 
 const AUTH = { Authorization: `Bearer ${token}` };
-let ws = null, wsDelay = 2000;
+let ws = null, wsDelay = 500;   // start fast, back off on repeated failure
 let focusChart = null, stressChart = null;
 let lastChart = 0;
-const CHART_THR = 160;
+const CHART_THR = 100;   // 10 fps max chart updates — was 160ms, snappier now
 const MAX_PTS   = 80;
+
+// Track current session to detect changes
+let _currentSessionId = null;
+let _prevFocus = null, _prevStress = null, _prevTremor = null, _prevAvg = null;
 
 const BODY_LABELS = {
   head:'Head / Cranium', chest:'Thorax / Chest', hip:'Pelvis / Hip',
@@ -805,7 +840,7 @@ function makeChart(id, color, label, yMin, yMax, thresholds) {
         annotation: { annotations },
         tooltip: {
           backgroundColor: 'rgba(20,25,34,.97)',
-          titleColor: '#94a3b8', bodyColor: '#f1f5f9',
+          titleColor: '#94A3B8', bodyColor: '#E6EDF7',
           borderColor: 'rgba(59,130,246,.25)', borderWidth: 1,
           callbacks: {
             label: c => `${label}: ${c.parsed.y.toFixed(3)}`,
@@ -816,12 +851,12 @@ function makeChart(id, color, label, yMin, yMax, thresholds) {
         y: {
           min: yMin, max: yMax,
           grid:  { color: 'rgba(255,255,255,.04)' },
-          ticks: { color: '#334155', font: { size: 9, family: 'Inter' }, maxTicksLimit: 6 },
+          ticks: { color: '#4A5568', font: { size: 9, family: 'DM Sans' }, maxTicksLimit: 6 },
           border: { color: 'rgba(255,255,255,.05)' }
         },
         x: {
           grid:  { display: false },
-          ticks: { color: '#334155', font: { size: 9, family: 'Inter' }, maxTicksLimit: 10, maxRotation: 0 },
+          ticks: { color: '#4A5568', font: { size: 9, family: 'DM Sans' }, maxTicksLimit: 10, maxRotation: 0 },
           border: { color: 'rgba(255,255,255,.05)' }
         }
       }
@@ -830,7 +865,7 @@ function makeChart(id, color, label, yMin, yMax, thresholds) {
 }
 
 function initCharts() {
-  focusChart = makeChart('focusChart', '#3b82f6', 'Focus', 0, 1, [
+  focusChart = makeChart('focusChart', '#00F5FF', 'Focus', 0, 1, [
     { val: 0.6,  label: 'Alert (0.6)',  color: 'rgba(217,119,6,.55)' },
     { val: 0.35, label: 'Critical (0.35)', color: 'rgba(220,38,38,.55)' },
   ]);
@@ -851,23 +886,32 @@ function pushPt(chart, val) {
 }
 
 // ════════════════════════════════════════════════════════
-//  WebSocket
+//  WebSocket — fast initial connect, exponential back-off on failure
 // ════════════════════════════════════════════════════════
 function connectWS() {
+  if (ws && ws.readyState <= 1) return; // already open/connecting
   const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
   ws = new WebSocket(`${proto}//${location.host}/ws/dashboard?token=${encodeURIComponent(token)}`);
-  ws.onopen  = () => { wsDelay = 2000; setConn(true, 'Connected'); };
+
+  ws.onopen = () => {
+    wsDelay = 500; // reset back-off on successful connect
+    setConn(true, 'Connected');
+  };
+
   ws.onmessage = e => {
     try {
+      _wsLive = true;  // WS is delivering — REST poll can stop
       const msg = JSON.parse(e.data);
       if (msg.type === 'sensor_update') render(msg.data);
     } catch {}
   };
+
   ws.onclose = () => {
-    setConn(false, `Disconnected — retry in ${(wsDelay/1000).toFixed(1)}s`);
+    setConn(false, `Reconnecting in ${(wsDelay / 1000).toFixed(1)}s…`);
     setTimeout(connectWS, wsDelay);
-    wsDelay = Math.min(wsDelay * 1.6, 30000);
+    wsDelay = Math.min(wsDelay * 1.8, 15000); // softer cap: 15s max
   };
+
   ws.onerror = () => ws.close();
 }
 
@@ -879,11 +923,16 @@ function setConn(on, msg) {
 // ════════════════════════════════════════════════════════
 //  Main render
 // ════════════════════════════════════════════════════════
-let _prevFocus = null, _prevStress = null, _prevTremor = null, _prevAvg = null;
 
 function render(data) {
   const gs  = data.global_stats;
   const adv = data.advanced;
+
+  // ── Fix 6: Detect session change and reset all stale UI ──────
+  if (data.session_id && data.session_id !== _currentSessionId) {
+    _currentSessionId = data.session_id;
+    resetSessionUI();
+  }
 
   // Status bar
   document.getElementById('sessionTitle').textContent = `Active Session — Patient: ${data.patient_id}`;
@@ -905,7 +954,7 @@ function render(data) {
   if (adv) renderAdvanced(adv, data);
 
   renderBodyMap(data.body_status);
-  renderAI(data.ai_buffer || [data.ai_command]);
+  renderCurrentAI(data.ai_command);
 
   // Charts
   const now = Date.now();
@@ -959,12 +1008,12 @@ function renderAdvanced(adv, data) {
   const arc  = document.getElementById('stabArc');
   if (arc) {
     arc.style.strokeDashoffset = circ - (stab / 100) * circ;
-    arc.style.stroke = stab >= 70 ? '#3b82f6' : stab >= 40 ? '#d97706' : '#dc2626';
+    arc.style.stroke = stab >= 70 ? '#00F5FF' : stab >= 40 ? '#F59E0B' : '#DC2626';
   }
   const sv = document.getElementById('stabVal');
   if (sv) {
     sv.textContent = stab;
-    sv.style.color = stab >= 70 ? '#3b82f6' : stab >= 40 ? '#fbbf24' : '#ef4444';
+    sv.style.color = stab >= 70 ? '#00F5FF' : stab >= 40 ? '#F59E0B' : '#EF4444';
   }
 
   // Confidence
@@ -1067,7 +1116,7 @@ function renderPredictions(adv) {
 }
 
 // ════════════════════════════════════════════════════════
-//  Body map
+//  Body map — uses setAttribute for SVG className compat
 // ════════════════════════════════════════════════════════
 const COLOR_MAP = {
   normal:   's-normal',
@@ -1077,50 +1126,162 @@ const COLOR_MAP = {
   critical: 's-critical',
 };
 
+// Pre-cache all segment elements once
+const _segCache = {};
+function _getSeg(name) {
+  if (!_segCache[name]) _segCache[name] = document.getElementById(`part-${name}`);
+  return _segCache[name];
+}
+
 function renderBodyMap(bs) {
   if (!bs) return;
   for (const [name, d] of Object.entries(bs)) {
-    const el = document.getElementById(`part-${name}`);
+    const el = _getSeg(name);
     if (!el) continue;
-    el.className = `seg ${COLOR_MAP[d.color] || 's-normal'}`;
+    const cls = `seg ${COLOR_MAP[d.color] || 's-normal'}`;
+    // SVG elements require setAttribute — plain .className is unreliable in SVG
+    el.setAttribute('class', cls);
     const lbl = BODY_LABELS[name] || name;
     el.onmouseenter = () => {
-      const zStr = d.stress_z !== undefined ? ` · z=${d.stress_z.toFixed(2)}σ` : '';
-      const slopeStr = d.slope !== undefined && Math.abs(d.slope) > 0.01
+      const zStr    = d.stress_z  !== undefined ? ` · z=${d.stress_z.toFixed(2)}σ` : '';
+      const slopeStr = d.slope    !== undefined && Math.abs(d.slope) > 0.01
         ? ` · slope ${d.slope > 0 ? '▲' : '▼'}${Math.abs(d.slope).toFixed(2)}`
         : '';
       document.getElementById('bodyTip').textContent =
-        `${lbl} · Arousal:${d.stress_trend.toFixed(1)} · Tremor:${d.tremor.toFixed(1)}${zStr}${slopeStr}`;
+        `${lbl} · Arousal:${(d.stress_trend||0).toFixed(1)} · Tremor:${(d.tremor||0).toFixed(1)}${zStr}${slopeStr}`;
     };
     el.onmouseleave = () => { document.getElementById('bodyTip').textContent = ''; };
   }
 }
 
-// ════════════════════════════════════════════════════════
-//  AI command log
-// ════════════════════════════════════════════════════════
-function renderAI(recs) {
-  const cnt = document.getElementById('aiCount');
-  const lst = document.getElementById('aiList');
-  const emp = document.getElementById('aiEmpty');
-  if (!recs || !recs.length) {
-    cnt.textContent = '0 events';
-    if (emp) emp.style.display = 'flex';
-    return;
-  }
-  if (emp) emp.style.display = 'none';
-  cnt.textContent = `${recs.length} event${recs.length !== 1 ? 's' : ''}`;
+// Reset all body map segments to normal
+function resetBodyMap() {
+  document.querySelectorAll('#mapSvg .seg').forEach(el => el.setAttribute('class', 'seg s-normal'));
+}
 
-  const sevClass = { critical:'ec', high:'eh', medium:'em', low:'el', moderate:'em' };
-  lst.innerHTML = recs.map(ai => `
-    <div class="ai-event ${sevClass[ai.severity] || 'el'}">
-      <span class="badge ${SEV_CLS[ai.severity] || 'b-low'}" style="flex-shrink:0">${ai.severity||'low'}</span>
-      <div class="flex-1 min-w-0">
-        <div class="text-xs font-semibold capitalize" style="color:var(--text)">${(ai.command||'—').replace(/_/g,' ')}</div>
-        <div class="text-xs leading-snug mt-0.5" style="color:var(--t3)">${ai.reason||''}</div>
-        ${ai.timestamp ? `<div class="mono" style="font-size:9px;color:var(--t3);margin-top:2px">${ai.timestamp}</div>` : ''}
-      </div>
-    </div>`).join('');
+// ════════════════════════════════════════════════════════
+//  Current AI Command (replaces the old scrolling log)
+// ════════════════════════════════════════════════════════
+const SEV_BORDER = {
+  critical: 'rgba(220,38,38,.45)',
+  high:     'rgba(239,68,68,.3)',
+  medium:   'rgba(139,92,246,.3)',
+  moderate: 'rgba(139,92,246,.3)',
+  low:      'rgba(255,255,255,.07)',
+};
+
+function renderCurrentAI(ai) {
+  if (!ai) return;
+  const card    = document.getElementById('aiCmdCard');
+  const badge   = document.getElementById('aiCmdBadge');
+  const name    = document.getElementById('aiCmdName');
+  const reason  = document.getElementById('aiCmdReason');
+  const ts      = document.getElementById('aiLastTs');
+
+  const sev = (ai.severity || 'low').toLowerCase();
+  badge.className = `badge ${SEV_CLS[sev] || 'b-low'}`;
+  badge.textContent = sev;
+  name.textContent  = (ai.command || '—').replace(/_/g, ' ');
+  reason.textContent = ai.reason || '';
+  if (card) card.style.borderColor = SEV_BORDER[sev] || 'var(--bdr)';
+  if (ts && ai.timestamp) ts.textContent = ai.timestamp.slice(-8) || ''; // show HH:MM:SS
+}
+
+// ════════════════════════════════════════════════════════
+//  Session Reset — clears all stale data when session changes
+// ════════════════════════════════════════════════════════
+function resetSessionUI() {
+  // Prev-value deltas
+  _prevFocus = null; _prevStress = null; _prevAvg = null; _prevTremor = null;
+
+  // Metric cards
+  ['mFocus','mStress','mAvgStress','mTremor','mConf'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.textContent = '—';
+  });
+  ['bFocus','bStress','bAvgStress','bTremor','bConf'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.style.width = '0%';
+  });
+  ['dFocus','dStress','dAvgStress','dTremor'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.className = 'metric-delta delta-stable'; el.textContent = '—'; }
+  });
+
+  // Status bar
+  document.getElementById('durationLabel').textContent = '';
+  document.getElementById('frameLabel').textContent    = '';
+  document.getElementById('infoDuration').textContent  = '00:00';
+  document.getElementById('infoFrames').textContent    = '0 frames';
+
+  // Stability + risk
+  const arc = document.getElementById('stabArc');
+  if (arc) { arc.style.strokeDashoffset = '289'; arc.style.stroke = '#00F5FF'; }
+  const sv  = document.getElementById('stabVal');
+  if (sv)   { sv.textContent = '—'; sv.style.color = '#00F5FF'; }
+  ['riskBadge','riskBadgeBig'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.className = 'badge risk-LOW'; el.textContent = 'LOW RISK'; }
+  });
+
+  // Confidence
+  ['confPct','bigConfBar'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { if (el.tagName === 'SPAN' || el.tagName === 'DIV' && !el.style.width) el.textContent = '—'; else el.style.width = '0%'; }
+  });
+  document.getElementById('confPct').textContent     = '—';
+  document.getElementById('bigConfBar').style.width  = '0%';
+  document.getElementById('mConfLabel').textContent   = 'Awaiting data…';
+
+  // Trend + escalation
+  const te = document.getElementById('trendLabel');
+  if (te) { te.className = 'text-xs font-semibold t-st'; te.textContent = '— Stable'; }
+  const ee = document.getElementById('escalDots');
+  if (ee) ee.innerHTML = [0,1,2].map(() =>
+    `<div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.06)"></div>`
+  ).join('');
+
+  // Predictions
+  ['30','60','120'].forEach(s => {
+    const v = document.getElementById(`pred${s}`);
+    const t = document.getElementById(`pred${s}trend`);
+    const b = document.getElementById(`pred${s}bar`);
+    if (v) { v.textContent = '—'; v.style.color = 'var(--t3)'; }
+    if (t) t.textContent = '—';
+    if (b) b.style.width = '0%';
+  });
+  const pw = document.getElementById('predWarning');
+  if (pw) pw.classList.add('hidden');
+
+  // Body map → all normal
+  resetBodyMap();
+
+  // AI command card
+  const aiName   = document.getElementById('aiCmdName');
+  const aiReason = document.getElementById('aiCmdReason');
+  const aiBadge  = document.getElementById('aiCmdBadge');
+  const aiCard   = document.getElementById('aiCmdCard');
+  if (aiName)   aiName.textContent   = 'New session starting…';
+  if (aiReason) aiReason.textContent = '';
+  if (aiBadge)  { aiBadge.className  = 'badge b-low'; aiBadge.textContent = 'low'; }
+  if (aiCard)   aiCard.style.borderColor = 'var(--bdr)';
+  document.getElementById('aiLastTs').textContent = '';
+
+  // Anomalies + regions
+  document.getElementById('anomList').innerHTML =
+    '<div class="empty" style="padding:8px"><p>No anomalies detected</p></div>';
+  document.getElementById('anomCount').textContent = '0 detected';
+  document.getElementById('regionList').innerHTML =
+    '<div class="empty" style="padding:8px"><p>Awaiting session data</p></div>';
+
+  // Session summary
+  document.getElementById('sessionSummary').textContent = 'Session just started — summary will appear once data is collected.';
+
+  // Charts — clear all data points
+  if (focusChart)  { focusChart.data.labels = [];  focusChart.data.datasets[0].data = [];  focusChart.update('none'); }
+  if (stressChart) { stressChart.data.labels = []; stressChart.data.datasets[0].data = []; stressChart.update('none'); }
+
+  // Anomaly banner
+  const ab = document.getElementById('anomalyBanner');
+  if (ab) ab.classList.add('hidden');
 }
 
 // ════════════════════════════════════════════════════════
@@ -1162,7 +1323,7 @@ function renderRegions(regions) {
   const maxScore = regions[0].score || 1;
   el.innerHTML = regions.map((r, i) => {
     const pct  = maxScore > 0 ? ((r.score / maxScore) * 100) : 0;
-    const col  = r.score > 55 ? '#ef4444' : r.score > 30 ? '#fbbf24' : '#60a5fa';
+    const col  = r.score > 55 ? '#EF4444' : r.score > 30 ? '#F59E0B' : '#00F5FF';
     const sArrow = r.slope > 0.5 ? '<span class="t-up">▲</span>' : r.slope < -0.5 ? '<span class="t-dn">▼</span>' : '';
     return `<div>
       <div class="flex justify-between items-center">
@@ -1317,17 +1478,17 @@ function buildCmpChart(rowsA, rowsB) {
           annotation: { annotations },
           tooltip: {
             backgroundColor: 'rgba(20,25,34,.97)',
-            titleColor: '#94a3b8', bodyColor: '#f1f5f9',
+            titleColor: '#94A3B8', bodyColor: '#E6EDF7',
             borderColor: 'rgba(59,130,246,.25)', borderWidth: 1,
           }
         },
         scales: {
           y: { min: yMin, max: yMax,
                grid: { color: 'rgba(255,255,255,.04)' },
-               ticks: { color: '#334155', font: { size: 9 }, maxTicksLimit: 6 },
+               ticks: { color: '#4A5568', font: { size: 9 }, maxTicksLimit: 6 },
                border: { color: 'rgba(255,255,255,.05)' } },
           x: { grid: { display: false },
-               ticks: { color: '#334155', font: { size: 9 }, maxTicksLimit: 10, maxRotation: 0 },
+               ticks: { color: '#4A5568', font: { size: 9 }, maxTicksLimit: 10, maxRotation: 0 },
                border: { color: 'rgba(255,255,255,.05)' } }
         }
       }
@@ -1336,11 +1497,11 @@ function buildCmpChart(rowsA, rowsB) {
     if (id === 'cmpStressChart') cmpStrChart = chart;
   }
 
-  makeCmpChart('cmpFocusChart',  focA, focB, '#3b82f6', '#f59e0b', 0, 1, [
+  makeCmpChart('cmpFocusChart',  focA, focB, '#00F5FF', '#8B5CF6', 0, 1, [
     { val: 0.6,  label: 'Alert',    color: 'rgba(217,119,6,.5)' },
     { val: 0.35, label: 'Critical', color: 'rgba(220,38,38,.5)' },
   ]);
-  makeCmpChart('cmpStressChart', strA, strB, '#ef4444', '#f59e0b', 0, 25, [
+  makeCmpChart('cmpStressChart', strA, strB, '#EF4444', '#8B5CF6', 0, 25, [
     { val: 10, label: 'Alert',    color: 'rgba(217,119,6,.5)' },
     { val: 15, label: 'Critical', color: 'rgba(220,38,38,.5)' },
   ]);
@@ -1559,7 +1720,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initCharts();
   connectWS();
   loadDoctorInfo();
+  fetchLatestFrame();  // immediate data on page load, no waiting for WS
 });
+
+// ════════════════════════════════════════════════════════
+//  Initial data fetch — pull latest frame via REST so the
+//  page shows real data immediately on load/refresh,
+//  without waiting for the next WS broadcast.
+// ════════════════════════════════════════════════════════
+async function fetchLatestFrame() {
+  try {
+    const r = await fetch('/api/session/latest', { headers: AUTH });
+    if (r.ok) {
+      const data = await r.json();
+      if (data && data.global_stats) render(data);
+    }
+  } catch {}
+  // Poll every 2s as fallback when WS hasn't delivered yet
+  // Stops automatically once WS is live (WS sets _wsLive = true)
+  if (!_wsLive) setTimeout(fetchLatestFrame, 2000);
+}
+let _wsLive = false;
 </script>
 </body>
 </html>

@@ -1,17 +1,4 @@
-"""
-YourMove — Anomaly Detection Module  v4.0
-═══════════════════════════════════════════
-Statistical anomaly detection for VR physiological sensor streams.
 
-Detection methods:
-  1. Z-Score Detector      — single-sensor deviation from rolling baseline
-  2. Spike Detector        — instantaneous jump vs previous frame
-  3. Sustained Detector    — prolonged elevation above threshold
-  4. Multi-Sensor Detector — correlated elevation across body regions
-
-Output: structured AnomalyEvent objects with severity, confidence, and
-clinical context — designed for audit-trail logging in medical systems.
-"""
 from __future__ import annotations
 
 import logging
@@ -24,9 +11,7 @@ from data_processing import RollingBuffer, SensorProcessor, compute_z_score
 logger = logging.getLogger(__name__)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Event dataclass
-# ─────────────────────────────────────────────────────────────────────────────
 
 @dataclass
 class AnomalyEvent:
@@ -58,9 +43,8 @@ class AnomalyEvent:
         }
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Z-Score Anomaly Detector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class ZScoreDetector:
     """
@@ -128,9 +112,8 @@ class ZScoreDetector:
         return event
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Spike Detector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class SpikeDetector:
     """
@@ -195,9 +178,7 @@ class SpikeDetector:
         )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Sustained Elevation Detector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class SustainedDetector:
     """
@@ -297,9 +278,7 @@ class SustainedDetector:
         return None
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Multi-Sensor Correlation Detector
-# ─────────────────────────────────────────────────────────────────────────────
 
 class MultiSensorDetector:
     """
@@ -343,9 +322,7 @@ class MultiSensorDetector:
         )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 # Orchestrated Anomaly Engine
-# ─────────────────────────────────────────────────────────────────────────────
 
 class AnomalyEngine:
     """
