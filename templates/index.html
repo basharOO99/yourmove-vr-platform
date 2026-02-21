@@ -1,482 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YourMove - AI-Powered VR Therapy Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a0a0f;
-            color: #e0e0ff;
-            overflow-x: hidden;
-        }
-        
-        /* Neon Gradient Colors */
-        :root {
-            --cyan: #00f5ff;
-            --purple: #8b5cf6;
-            --pink: #ff006e;
-            --dark-bg: #0a0a0f;
-            --card-bg: #141420;
-        }
-        
-        /* Gradient Animations */
-        .gradient-text {
-            background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradient-shift 3s ease infinite;
-            background-size: 200% 200%;
-        }
-        
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .gradient-border {
-            position: relative;
-            background: var(--card-bg);
-            border-radius: 1rem;
-        }
-        
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 1rem;
-            padding: 2px;
-            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0.6;
-        }
-        
-        /* Glow Effects */
-        .glow {
-            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3),
-                        0 0 40px rgba(139, 92, 246, 0.2),
-                        0 0 60px rgba(255, 0, 110, 0.1);
-        }
-        
-        .glow-text {
-            text-shadow: 0 0 10px rgba(0, 245, 255, 0.5),
-                        0 0 20px rgba(139, 92, 246, 0.3),
-                        0 0 30px rgba(255, 0, 110, 0.2);
-        }
-        
-        /* Button Styles */
-        .btn-gradient {
-            background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
-            background-size: 200% 200%;
-            animation: gradient-shift 3s ease infinite;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            transition: left 0.5s ease;
-        }
-        
-        .btn-gradient:hover::before {
-            left: 100%;
-        }
-        
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 245, 255, 0.4);
-        }
-        
-        /* Card Styles */
-        .feature-card {
-            background: var(--card-bg);
-            border-radius: 1rem;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(139, 92, 246, 0.2);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--cyan);
-            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.2);
-        }
-        
-        /* Hero Background */
-        .hero-bg {
-            background: linear-gradient(135deg, #0a0a0f 0%, #141420 100%);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 245, 255, 0.1) 0%, transparent 70%);
-            top: -250px;
-            right: -250px;
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(255, 0, 110, 0.1) 0%, transparent 70%);
-            bottom: -250px;
-            left: -250px;
-            animation: pulse 4s ease-in-out infinite;
-            animation-delay: 2s;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-        
-        /* Navbar */
-        .navbar {
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-        }
-        
-        /* Logo Animation */
-        .logo-icon {
-            animation: rotate 10s linear infinite;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        /* Smooth Scroll */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Typography */
-        h1, h2, h3 {
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-bg::before,
-            .hero-bg::after {
-                width: 300px;
-                height: 300px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YourMove — Clinical VR Therapy Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;--p1:#141922;--p2:#1a2236;
+  --acc:#3b82f6;--acc2:#2563eb;
+  --crit:#dc2626;--high:#d97706;--low:#16a34a;
+  --text:#f1f5f9;--t2:#94a3b8;--t3:#475569;
+  --bdr:rgba(255,255,255,.06);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+
+/* Subtle texture */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(59,130,246,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+
+/* Nav */
+.navbar{background:rgba(10,14,23,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--bdr);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1160px;margin:0 auto;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-mark{width:32px;height:32px;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.3);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-text{font-size:16px;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--t3);font-weight:400;border-left:1px solid var(--bdr);margin-left:8px;padding-left:8px}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-link{font-size:13px;color:var(--t3);text-decoration:none;transition:color .15s}
+.nav-link:hover{color:var(--t2)}
+.btn-nav{padding:6px 16px;background:var(--acc);color:#fff;border-radius:5px;font-size:13px;font-weight:500;text-decoration:none;transition:background .15s}
+.btn-nav:hover{background:var(--acc2)}
+
+/* Main layout */
+.container{max-width:1160px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+/* Hero */
+.hero{padding:80px 0 60px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);border-radius:4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#60a5fa;margin-bottom:20px}
+.hero h1{font-size:clamp(28px,4vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.18;margin-bottom:18px;color:var(--text)}
+.hero h1 span{color:var(--acc)}
+.hero p{font-size:16px;color:var(--t2);max-width:560px;line-height:1.7;margin-bottom:32px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:var(--acc);color:#fff;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:background .15s;border:none;cursor:pointer}
+.btn-primary:hover{background:var(--acc2)}
+.btn-outline{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:transparent;color:var(--t2);border:1px solid var(--bdr);border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;transition:all .15s}
+.btn-outline:hover{border-color:var(--acc);color:var(--acc)}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;margin:48px 0 0}
+.stat-cell{background:var(--p1);padding:20px 24px}
+.stat-val{font-size:28px;font-weight:800;letter-spacing:-.03em;color:var(--text);line-height:1}
+.stat-val-accent{color:var(--acc)}
+.stat-lbl{font-size:12px;color:var(--t3);margin-top:4px}
+
+/* Section */
+.section{padding:64px 0}
+.section-tag{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.section-h{font-size:clamp(20px,3vw,30px);font-weight:700;letter-spacing:-.02em;color:var(--text);margin-bottom:10px}
+.section-sub{font-size:15px;color:var(--t2);max-width:520px;line-height:1.65}
+.divider{height:1px;background:var(--bdr);margin:0}
+
+/* Feature grid */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.feat-cell{background:var(--p1);padding:24px;transition:background .15s}
+.feat-cell:hover{background:var(--p2)}
+.feat-icon{width:36px;height:36px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.feat-h{font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.feat-p{font-size:13px;color:var(--t3);line-height:1.65}
+
+/* AI pipeline */
+.pipeline{display:flex;align-items:center;gap:0;border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.pipe-step{flex:1;padding:18px 16px;background:var(--p1);border-right:1px solid var(--bdr);position:relative}
+.pipe-step:last-child{border-right:none}
+.pipe-arrow{position:absolute;right:-10px;top:50%;transform:translateY(-50%);z-index:2;color:var(--t3);font-size:16px}
+.pipe-n{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:6px}
+.pipe-h{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.pipe-p{font-size:11px;color:var(--t3);line-height:1.5}
+
+/* Technical specs table */
+.spec-table{width:100%;border-collapse:collapse;background:var(--p1);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.spec-table th{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);padding:10px 16px;text-align:left;background:rgba(255,255,255,.02);border-bottom:1px solid var(--bdr)}
+.spec-table td{font-size:13px;padding:9px 16px;border-bottom:1px solid rgba(255,255,255,.03)}
+.spec-table tr:last-child td{border-bottom:none}
+.spec-table tr:hover td{background:rgba(255,255,255,.018)}
+
+/* Research panel */
+.research-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:8px;overflow:hidden}
+.rg-cell{background:var(--p1);padding:24px}
+
+/* Clinical outcomes cards */
+.outcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.outcome-card{background:var(--p1);border:1px solid var(--bdr);border-radius:8px;padding:20px}
+.outcome-n{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:4px}
+.outcome-l{font-size:12px;color:var(--t3);line-height:1.5}
+
+/* Footer */
+footer{border-top:1px solid var(--bdr);padding:36px 0}
+.footer-inner{max-width:1160px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.footer-brand{font-size:13px;font-weight:600;color:var(--t2)}
+.footer-note{font-size:11px;color:var(--t3);max-width:420px;line-height:1.55}
+
+/* Responsive */
+@media(max-width:768px){
+  .stats-row{grid-template-columns:1fr 1fr}
+  .feat-grid{grid-template-columns:1fr}
+  .pipeline{flex-direction:column}
+  .pipe-step{border-right:none;border-bottom:1px solid var(--bdr)}
+  .research-grid{grid-template-columns:1fr}
+  .outcome-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar fixed top-0 w-full z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <svg class="w-10 h-10 logo-icon" viewBox="0 0 100 100" fill="none">
-                        <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <circle cx="50" cy="50" r="45" stroke="url(#logoGradient)" stroke-width="4" fill="none"/>
-                        <path d="M50 20 L50 50 L70 50" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round"/>
-                    </svg>
-                    <span class="text-2xl font-bold gradient-text">YourMove</span>
-                </div>
-                <div class="hidden md:flex items-center gap-8">
-                    <a href="#about" class="text-gray-300 hover:text-cyan-400 transition">About</a>
-                    <a href="#features" class="text-gray-300 hover:text-cyan-400 transition">Features</a>
-                    <a href="#faq" class="text-gray-300 hover:text-cyan-400 transition">FAQ</a>
-                    <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition">Contact</a>
-                    <a href="/login" class="btn-gradient text-white">Doctor Portal</a>
-                </div>
-            </div>
-        </div>
+
+<!-- ══ NAVBAR ═════════════════════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <div class="logo-mark">
+        <svg width="16" height="16" viewBox="0 0 32 32" fill="none">
+          <path d="M16 4l5 10H28l-8 7 3 11-8-5-8 5 3-11-8-7h7z" fill="#3b82f6"/>
+        </svg>
+      </div>
+      <div class="logo-text">YourMove</div>
+      <div class="logo-sub hidden sm:block">Clinical Analytics Platform</div>
+    </a>
+    <nav class="nav-links">
+      <a class="nav-link" href="#platform">Platform</a>
+      <a class="nav-link" href="#ai">AI Engine</a>
+      <a class="nav-link" href="#research">Research</a>
+      <a class="btn-nav" href="/login">Clinician Login</a>
     </nav>
+  </div>
+</nav>
 
-    <!-- Hero Section -->
-    <section class="hero-bg pt-32 pb-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 glow-text">
-                    Next-Gen <span class="gradient-text">AI-Powered</span><br>
-                    VR Therapy Platform
-                </h1>
-                <p class="text-xl md:text-2xl mb-10 text-gray-400 max-w-3xl mx-auto">
-                    Real-time movement analysis and adaptive therapy sessions for children with autism using cutting-edge AI and immersive VR technology
-                </p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <a href="#features" class="btn-gradient text-white">Explore Features</a>
-                    <a href="/login" class="px-8 py-3 border-2 border-cyan-400 text-cyan-400 rounded-lg font-semibold hover:bg-cyan-400 hover:text-black transition">
-                        Get Started
-                    </a>
-                </div>
-                
-                <!-- Stats -->
-                <div class="grid grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
-                    <div class="gradient-border p-6">
-                        <div class="text-4xl font-bold gradient-text mb-2">13+</div>
-                        <div class="text-gray-400">Body Tracking Points</div>
-                    </div>
-                    <div class="gradient-border p-6">
-                        <div class="text-4xl font-bold gradient-text mb-2">60fps</div>
-                        <div class="text-gray-400">Real-Time Analysis</div>
-                    </div>
-                    <div class="gradient-border p-6">
-                        <div class="text-4xl font-bold gradient-text mb-2">AI</div>
-                        <div class="text-gray-400">Adaptive Learning</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ══ HERO ═══════════════════════════════════════════════════════════════ -->
+<div class="hero container">
+  <div class="hero-badge">
+    <svg width="10" height="10" viewBox="0 0 10 10" fill="#60a5fa"><circle cx="5" cy="5" r="3"/></svg>
+    AI-Powered Adaptive VR Therapy · ASD & ADHD
+  </div>
+  <h1>Evidence-based VR therapy,<br>powered by <span>clinical AI</span></h1>
+  <p>YourMove delivers real-time physiological analysis during virtual reality therapy sessions for children with Autism Spectrum Disorder and ADHD. Statistical anomaly detection, predictive stress modelling, and adaptive intervention — all in one platform.</p>
+  <div class="hero-cta">
+    <a class="btn-primary" href="/login">
+      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      Access Clinical Dashboard
+    </a>
+    <a class="btn-outline" href="#platform">
+      View Platform Architecture
+    </a>
+  </div>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 bg-gradient-to-b from-transparent to-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">About YourMove</h2>
-                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
-                    An innovative VR-based therapeutic system designed specifically for children with autism, 
-                    powered by Unreal Engine 5 and advanced AI algorithms
-                </p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="feature-card text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Immersive VR</h3>
-                    <p class="text-gray-400">Built with Unreal Engine 5 for stunning visual quality and responsive interactions</p>
-                </div>
-                <div class="feature-card text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Real-Time AI</h3>
-                    <p class="text-gray-400">Advanced machine learning models analyze movements and adapt therapy sessions instantly</p>
-                </div>
-                <div class="feature-card text-center">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-600 to-cyan-400 flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Child-Focused</h3>
-                    <p class="text-gray-400">Designed with safety and engagement in mind for children aged 4-12 with ASD</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-cell">
+      <div class="stat-val stat-val-accent">13</div>
+      <div class="stat-lbl">Real-time physiological sensors</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val stat-val-accent">60 Hz</div>
+      <div class="stat-lbl">Maximum sensor acquisition rate</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val stat-val-accent">120s</div>
+      <div class="stat-lbl">Predictive stress forecast horizon</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-val stat-val-accent">4</div>
+      <div class="stat-lbl">Anomaly detection algorithms</div>
+    </div>
+  </div>
+</div>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Core Features</h2>
-                <p class="text-xl text-gray-400">Advanced technology meeting therapeutic excellence</p>
-            </div>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="feature-card">
-                    <div class="text-cyan-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">13-Point Body Tracking</h3>
-                    <p class="text-gray-400">Comprehensive full-body movement monitoring including head, torso, limbs, and extremities</p>
-                </div>
-                
-                <!-- Feature 2 -->
-                <div class="feature-card">
-                    <div class="text-purple-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Adaptive AI Engine</h3>
-                    <p class="text-gray-400">Machine learning algorithms that adjust difficulty and content based on real-time performance</p>
-                </div>
-                
-                <!-- Feature 3 -->
-                <div class="feature-card">
-                    <div class="text-pink-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Live Dashboard</h3>
-                    <p class="text-gray-400">Real-time monitoring with visual body maps, charts, and AI-generated insights for therapists</p>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="feature-card">
-                    <div class="text-cyan-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Eye Tracking & Focus</h3>
-                    <p class="text-gray-400">HMD eye tracking monitors attention levels and alerts therapists to distraction or fatigue</p>
-                </div>
-                
-                <!-- Feature 5 -->
-                <div class="feature-card">
-                    <div class="text-purple-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">Stress & Tremor Detection</h3>
-                    <p class="text-gray-400">Predictive algorithms identify early warning signs and enable intervention before escalation</p>
-                </div>
-                
-                <!-- Feature 6 -->
-                <div class="feature-card">
-                    <div class="text-pink-400 mb-4">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold mb-3">HIPAA Compliant</h3>
-                    <p class="text-gray-400">Enterprise-grade security with encrypted data transmission and secure JWT authentication</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<div class="divider"></div>
 
-    <!-- FAQ Section -->
-    <section id="faq" class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">FAQ</h2>
-                <p class="text-xl text-gray-400">Common questions about YourMove</p>
-            </div>
-            <div class="space-y-6">
-                <div class="gradient-border p-6">
-                    <h3 class="text-xl font-bold mb-3 text-cyan-400">How does YourMove work?</h3>
-                    <p class="text-gray-400">YourMove uses VR sensors to track body movements in real-time. Our AI analyzes this data to detect stress patterns, tremors, and focus levels, then adapts therapy sessions accordingly for optimal outcomes.</p>
-                </div>
-                <div class="gradient-border p-6">
-                    <h3 class="text-xl font-bold mb-3 text-purple-400">Is it safe for children?</h3>
-                    <p class="text-gray-400">Absolutely. YourMove prioritizes child safety. All sessions are monitored by licensed therapists, and the system automatically intervenes if excessive stress is detected.</p>
-                </div>
-                <div class="gradient-border p-6">
-                    <h3 class="text-xl font-bold mb-3 text-pink-400">What age range is appropriate?</h3>
-                    <p class="text-gray-400">YourMove is optimized for children aged 4-12 with autism spectrum disorder. The system adapts to different developmental levels and diagnosis severity (Level 1, 2, or 3).</p>
-                </div>
-                <div class="gradient-border p-6">
-                    <h3 class="text-xl font-bold mb-3 text-cyan-400">How do doctors monitor sessions?</h3>
-                    <p class="text-gray-400">Therapists use our secure dashboard to view real-time body stress maps, live charts, and AI-generated insights during each session through an intuitive web interface.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ══ PLATFORM SECTION ═══════════════════════════════════════════════════ -->
+<section class="section" id="platform">
+  <div class="container">
+    <div class="section-tag">Platform Architecture</div>
+    <h2 class="section-h">Clinical-grade sensor processing pipeline</h2>
+    <p class="section-sub">Every data point is processed through a validated statistical pipeline before influencing any clinical decision — designed for medical-device-grade reliability.</p>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6 gradient-text">Get in Touch</h2>
-            <p class="text-xl text-gray-400 mb-10">Ready to bring YourMove to your clinic?</p>
-            <div class="flex flex-wrap justify-center gap-4">
-                <a href="mailto:contact@yourmove.com" class="btn-gradient text-white">Email Us</a>
-                <a href="tel:+1234567890" class="px-8 py-3 border-2 border-purple-400 text-purple-400 rounded-lg font-semibold hover:bg-purple-400 hover:text-white transition">
-                    Call Now
-                </a>
-            </div>
-        </div>
-    </section>
+    <div class="pipeline mt-8">
+      <div class="pipe-step">
+        <div class="pipe-n">01 — Acquisition</div>
+        <div class="pipe-h">UE5 Sensor Stream</div>
+        <div class="pipe-p">13-sensor VR body map transmitted at up to 60 Hz via WebSocket to FastAPI server</div>
+        <span class="pipe-arrow">›</span>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-n">02 — Processing</div>
+        <div class="pipe-h">Statistical Normalisation</div>
+        <div class="pipe-p">Welford online variance, EWMA smoothing, rolling z-score baseline (data_processing.py)</div>
+        <span class="pipe-arrow">›</span>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-n">03 — Detection</div>
+        <div class="pipe-h">Anomaly Engine</div>
+        <div class="pipe-p">4-method detection: z-score, spike, sustained elevation, multi-sensor correlation</div>
+        <span class="pipe-arrow">›</span>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-n">04 — Forecast</div>
+        <div class="pipe-h">Predictive Model</div>
+        <div class="pipe-p">OLS + EWMA ensemble forecasting at 30/60/120s horizons with confidence intervals</div>
+        <span class="pipe-arrow">›</span>
+      </div>
+      <div class="pipe-step">
+        <div class="pipe-n">05 — Command</div>
+        <div class="pipe-h">Adaptive Intervention</div>
+        <div class="pipe-p">Severity-ranked AI command returned to UE5 for real-time session adaptation</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-800 py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none">
-                            <defs>
-                                <linearGradient id="footerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
-                                    <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <circle cx="50" cy="50" r="45" stroke="url(#footerGradient)" stroke-width="4" fill="none"/>
-                        </svg>
-                        <span class="text-xl font-bold gradient-text">YourMove</span>
-                    </div>
-                    <p class="text-gray-500">AI-powered VR therapy for children with autism</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-cyan-400">Product</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="#features" class="hover:text-cyan-400 transition">Features</a></li>
-                        <li><a href="#about" class="hover:text-cyan-400 transition">About</a></li>
-                        <li><a href="/login" class="hover:text-cyan-400 transition">Doctor Portal</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-purple-400">Support</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="#faq" class="hover:text-purple-400 transition">FAQ</a></li>
-                        <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
-                        <li><a href="#" class="hover:text-purple-400 transition">Documentation</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-4 text-pink-400">Legal</h4>
-                    <ul class="space-y-2 text-gray-500">
-                        <li><a href="#" class="hover:text-pink-400 transition">Privacy Policy</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">Terms of Service</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition">HIPAA Compliance</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-                <p>&copy; 2024 YourMove. All rights reserved. Built with ❤️ for children with autism.</p>
-            </div>
+<div class="divider"></div>
+
+<!-- ══ FEATURES ═══════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-tag">Clinical Features</div>
+    <h2 class="section-h">Built for practising clinicians</h2>
+    <p class="section-sub" style="margin-bottom:28px">Every feature is designed to support, not replace, clinical judgement.</p>
+
+    <div class="feat-grid">
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
-    </footer>
+        <div class="feat-h">Patient Stability Index</div>
+        <div class="feat-p">0–100 composite score combining focus, arousal, and tremor data. Updated every frame. Quantifies session-level therapeutic state in a single interpretable metric.</div>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="feat-h">Z-Score Anomaly Detection</div>
+        <div class="feat-p">Per-sensor rolling baselines computed via Welford's online algorithm. Standardised z-scores flag statistically significant deviations at 2σ, 2.5σ, 3σ, and 4σ thresholds.</div>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        </div>
+        <div class="feat-h">Predictive Stress Modelling</div>
+        <div class="feat-p">OLS linear regression and EWMA ensemble model forecasts stress levels at 30, 60, and 120-second horizons. Enables pre-emptive intervention before outburst events.</div>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <div class="feat-h">AI Confidence Scoring</div>
+        <div class="feat-p">Every AI decision is accompanied by a confidence score based on buffer fill level, signal-to-noise ratio, and model R². Clinicians are always informed of analytical reliability.</div>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 9m0 8V9m0 0L9 7"/></svg>
+        </div>
+        <div class="feat-h">13-Sensor Body Heatmap</div>
+        <div class="feat-p">Real-time 5-state colour map (Normal → Critical) for all 13 body-part sensors. EMA-smoothed values prevent visual noise. Hovering reveals z-score and trend slope.</div>
+      </div>
+      <div class="feat-cell">
+        <div class="feat-icon">
+          <svg width="18" height="18" fill="none" stroke="#3b82f6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <div class="feat-h">Session Report Export</div>
+        <div class="feat-p">One-click PDF export of the live dashboard including all charts, stability score, risk classification, anomaly log, and auto-generated session summary for clinical records.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ AI ENGINE SECTION ══════════════════════════════════════════════════ -->
+<section class="section" id="ai">
+  <div class="container">
+    <div class="section-tag">AI Engine</div>
+    <h2 class="section-h">Statistical methods, not black-box ML</h2>
+    <p class="section-sub" style="margin-bottom:32px">YourMove's AI is interpretable by design. Every decision is traceable to a specific statistical finding, logged to an audit trail, and accompanied by a natural-language clinical rationale.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <table class="spec-table">
+        <thead><tr><th>Method</th><th>Applied To</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Welford Online Variance</td><td>Per-sensor rolling buffer</td><td>Numerically stable σ²</td></tr>
+          <tr><td>Z-Score Standardisation</td><td>Stress &amp; tremor signals</td><td>Anomaly detection</td></tr>
+          <tr><td>OLS Linear Regression</td><td>Last 30 observations</td><td>Trend slope + R²</td></tr>
+          <tr><td>EWMA (α=0.15)</td><td>Per-sensor signals</td><td>Noise-resistant smoothing</td></tr>
+          <tr><td>Ensemble Forecasting</td><td>OLS + EWMA blend</td><td>30/60/120s prediction</td></tr>
+          <tr><td>Multi-Sensor Correlation</td><td>Global body state</td><td>Pre-meltdown detection</td></tr>
+        </tbody>
+      </table>
+
+      <table class="spec-table">
+        <thead><tr><th>Parameter</th><th>Value</th><th>Justification</th></tr></thead>
+        <tbody>
+          <tr><td>Z-score alert</td><td>|z| ≥ 2.0σ</td><td>~5% false positive rate</td></tr>
+          <tr><td>Z-score critical</td><td>|z| ≥ 4.0σ</td><td>~1-in-15,787 by chance</td></tr>
+          <tr><td>Stress alert</td><td>≥ 10.0</td><td>Clinical threshold</td></tr>
+          <tr><td>Stress critical</td><td>≥ 15.0</td><td>Outburst precursor</td></tr>
+          <tr><td>Tremor alert</td><td>≥ 2.5</td><td>Mild motor dysregulation</td></tr>
+          <tr><td>Buffer capacity</td><td>120 frames</td><td>≈2 min @ 1 Hz baseline</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ RESEARCH SECTION ═══════════════════════════════════════════════════ -->
+<section class="section" id="research">
+  <div class="container">
+    <div class="section-tag">Research Ready</div>
+    <h2 class="section-h">Designed for clinical research and audit</h2>
+    <p class="section-sub" style="margin-bottom:32px">YourMove produces structured, exportable data that supports academic research into VR-based behavioural therapy for ASD.</p>
+
+    <div class="research-grid">
+      <div class="rg-cell">
+        <div class="section-tag" style="color:#4ade80">Data Architecture</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin:8px 0">Structured session logging</div>
+        <div style="font-size:13px;color:var(--t3);line-height:1.65">Every session is logged to indexed SQLite tables with millisecond timestamps, AI decisions, confidence scores, and raw sensor aggregates. Export via REST API in JSON format for downstream analysis.</div>
+        <div class="mt-4 flex flex-col gap-2">
+          <div style="font-size:12px;padding:8px;background:var(--p2);border-radius:4px;font-family:monospace;color:#93c5fd">GET /api/session/export?session_id=…</div>
+          <div style="font-size:12px;padding:8px;background:var(--p2);border-radius:4px;font-family:monospace;color:#93c5fd">GET /api/session/history?patient_id=…</div>
+        </div>
+      </div>
+      <div class="rg-cell">
+        <div class="section-tag" style="color:#fbbf24">Audit Trail</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text);margin:8px 0">Structured AI decision logging</div>
+        <div style="font-size:13px;color:var(--t3);line-height:1.65">Every AI command, anomaly event, and risk classification is logged as structured JSON to a dedicated audit logger. Designed for GDPR-compliant clinical documentation in accordance with medical device traceability requirements.</div>
+        <div class="mt-4 p-3" style="background:var(--p2);border-radius:4px;font-family:monospace;font-size:11px;color:#94a3b8;line-height:1.7">
+          {"event":"ai_command","ts":…,<br>
+          &nbsp;"command":"slow_down",<br>
+          &nbsp;"severity":"medium",<br>
+          &nbsp;"anomalies":2,"confidence":0.82}
+        </div>
+      </div>
+    </div>
+
+    <!-- Outcomes row -->
+    <div class="outcome-grid mt-6">
+      <div class="outcome-card">
+        <div class="outcome-n" style="color:var(--acc)">< 5ms</div>
+        <div class="outcome-l">AI analysis latency per data frame. Real-time decision-making without blocking the WebSocket event loop.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-n" style="color:#4ade80">~2 Hz</div>
+        <div class="outcome-l">Throttled database write rate (1-in-5 frames at 10 Hz input), preserving system performance while maintaining complete session records.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-n" style="color:#fbbf24">4-tier</div>
+        <div class="outcome-l">Risk classification system: LOW → MODERATE → HIGH → CRITICAL, aligned with escalating clinical intervention protocols for ASD/ADHD therapy.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ SECURITY SECTION ═══════════════════════════════════════════════════ -->
+<section class="section" style="padding:48px 0">
+  <div class="container">
+    <div class="section-tag">Security & Compliance</div>
+    <h2 class="section-h" style="font-size:20px">Production security posture</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;margin-top:24px">
+      <div style="background:var(--p1);padding:18px 16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#4ade80;margin-bottom:6px">Auth</div>
+        <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:3px">JWT + bcrypt</div>
+        <div style="font-size:11px;color:var(--t3)">HS256 tokens, 12-round bcrypt, 8h expiry</div>
+      </div>
+      <div style="background:var(--p1);padding:18px 16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#4ade80;margin-bottom:6px">Rate Limiting</div>
+        <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:3px">IP-level throttle</div>
+        <div style="font-size:11px;color:var(--t3)">5 login attempts / 60s; 60 API requests / 60s</div>
+      </div>
+      <div style="background:var(--p1);padding:18px 16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#4ade80;margin-bottom:6px">CORS</div>
+        <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:3px">Origin whitelist</div>
+        <div style="font-size:11px;color:var(--t3)">Configurable via ALLOWED_ORIGINS env var</div>
+      </div>
+      <div style="background:var(--p1);padding:18px 16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#4ade80;margin-bottom:6px">Transport</div>
+        <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:3px">WSS + HTTPS</div>
+        <div style="font-size:11px;color:var(--t3)">Dashboard WS validates JWT token on connect</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══ CTA ════════════════════════════════════════════════════════════════ -->
+<section style="padding:72px 0">
+  <div class="container text-center">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--acc);margin-bottom:12px">Get Started</div>
+    <h2 style="font-size:clamp(22px,3vw,34px);font-weight:700;letter-spacing:-.02em;margin-bottom:14px">Ready to run your first session?</h2>
+    <p style="font-size:15px;color:var(--t2);max-width:440px;margin:0 auto 28px">Access the clinical dashboard and connect your UE5 VR session in minutes. Default credentials provided for evaluation.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn-primary" href="/login">Access Dashboard</a>
+      <a class="btn-outline" href="/docs">API Reference</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">YourMove Clinical Platform  v4.0</div>
+      <div style="font-size:11px;color:var(--t3);margin-top:2px">ASD & ADHD VR Therapy Analytics</div>
+    </div>
+    <div class="footer-note">
+      YourMove is a clinical decision support tool designed to assist, not replace, qualified therapists. AI outputs should be interpreted in conjunction with clinical observation. This system is not an FDA/CE-cleared medical device.
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>

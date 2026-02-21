@@ -1,98 +1,95 @@
 """
-Authentication and Authorization System
-JWT-based authentication with secure password hashing
+Authentication & Authorization — JWT-based with bcrypt password hashing.
+SECRET_KEY MUST be set via the SECRET_KEY environment variable in production.
 """
+from __future__ import annotations
+
+import os
+import logging
 from datetime import datetime, timedelta
 from typing import Optional
+
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
+
 from models import Doctor, get_db
 
+logger = logging.getLogger(__name__)
 
-# Security configuration
-SECRET_KEY = "your-secret-key-change-in-production-use-env-variable"
+# ── Config ────────────────────────────────────────────────────────────────────
+# IMPORTANT: set a strong SECRET_KEY environment variable before deploying.
+_DEFAULT_KEY = "CHANGE-ME-use-env-SECRET_KEY-in-production-min-32-chars!!"
+SECRET_KEY: str = os.environ.get("SECRET_KEY", _DEFAULT_KEY)
+if SECRET_KEY == _DEFAULT_KEY:
+    logger.warning(
+        "SECRET_KEY is using the default insecure value. "
+        "Set the SECRET_KEY environment variable before deploying to production."
+    )
+
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 480  # 8 hours
+ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.environ.get("TOKEN_EXPIRE_MINUTES", "480"))  # 8 h
 
-# Password hashing
+# ── Crypto helpers ────────────────────────────────────────────────────────────
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-# Bearer token security
-security = HTTPBearer()
+security    = HTTPBearer()
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against a hash"""
-    return pwd_context.verify(plain_password, hashed_password)
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password"""
     return pwd_context.hash(password)
 
 
 def authenticate_doctor(username: str, password: str, db: Session) -> Optional[Doctor]:
-    """Authenticate a doctor by username and password"""
+    """Return the Doctor if credentials are valid, otherwise None."""
     doctor = db.query(Doctor).filter(Doctor.username == username).first()
-    if not doctor:
-        return None
-    if not verify_password(password, doctor.hashed_password):
+    if doctor is None or not verify_password(password, doctor.hashed_password):
         return None
     return doctor
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create a JWT access token"""
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+    to_encode["exp"] = expire
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def decode_access_token(token: str) -> Optional[str]:
+    """Return the username (sub claim) or None if the token is invalid/expired."""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-
-        username = payload.get("sub")
-
+        username: str | None = payload.get("sub")
         if not isinstance(username, str) or not username:
             return None
-
         return username
-
     except JWTError:
+        # Do NOT log the token itself — avoid leaking credentials
         return None
-
 
 
 def get_current_doctor(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ) -> Doctor:
-    """Dependency to get the current authenticated doctor"""
-    token = credentials.credentials
-    username = decode_access_token(token)
-    
+    """FastAPI dependency — validates JWT and returns the authenticated Doctor."""
+    username = decode_access_token(credentials.credentials)
     if username is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
+            detail="Invalid or expired credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
     doctor = db.query(Doctor).filter(Doctor.username == username).first()
     if doctor is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Doctor not found",
+            detail="Doctor account not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
     return doctor

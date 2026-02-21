@@ -1,26 +1,56 @@
 """
 Database Models for YourMove VR Therapy System
-SQLAlchemy models for doctors and patients
-(Updated for SQLAlchemy 2.0 + Pylance type checking)
+SQLAlchemy 2.0 fully typed models — production safe
 """
+from __future__ import annotations
 
-from sqlalchemy import String, Integer, Text, DateTime, create_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
-from datetime import datetime
 from typing import Optional
+from datetime import datetime
 import os
 
+from sqlalchemy import String, Integer, Text, DateTime, Float, create_engine
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    sessionmaker,
+)
 
-# ---------- Base ----------
+# ──────────────────────────────────────────────────────────────────────────────
+# Base (SQLAlchemy 2.0 style)
+# ──────────────────────────────────────────────────────────────────────────────
 
 class Base(DeclarativeBase):
     pass
 
 
-# ---------- Doctor Model ----------
+# ──────────────────────────────────────────────────────────────────────────────
+# Database Engine
+# ──────────────────────────────────────────────────────────────────────────────
+
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./yourmove.db")
+
+_connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+
+engine = create_engine(
+    DATABASE_URL,
+    connect_args=_connect_args,
+    pool_pre_ping=True,
+)
+
+SessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine,
+)
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# Models
+# ──────────────────────────────────────────────────────────────────────────────
 
 class Doctor(Base):
-    """Doctor/Therapist account model"""
+    """Therapist / doctor account"""
     __tablename__ = "doctors"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
@@ -28,16 +58,17 @@ class Doctor(Base):
     hashed_password: Mapped[str] = mapped_column(String(255))
     full_name: Mapped[str] = mapped_column(String(100))
     email: Mapped[Optional[str]] = mapped_column(String(100), unique=True, index=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow
+    )
 
     def __repr__(self) -> str:
-        return f"<Doctor(username='{self.username}', name='{self.full_name}')>"
+        return f"<Doctor username={self.username!r}>"
 
-
-# ---------- Patient Model ----------
 
 class Patient(Base):
-    """Patient model for children undergoing VR therapy"""
+    """Patient receiving VR therapy"""
     __tablename__ = "patients"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
@@ -46,28 +77,46 @@ class Patient(Base):
     gender: Mapped[str] = mapped_column(String(20))
     diagnosis_level: Mapped[str] = mapped_column(String(50))
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow
+    )
 
     def __repr__(self) -> str:
-        return f"<Patient(id={self.id}, name='{self.name}', age={self.age})>"
+        return f"<Patient id={self.id} name={self.name!r}>"
 
 
-# ---------- Database Setup ----------
+class SessionDataLog(Base):
+    """Persistent time-series log"""
+    __tablename__ = "session_data_log"
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./yourmove.db")
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    session_id: Mapped[str] = mapped_column(String(100), index=True)
+    patient_id: Mapped[str] = mapped_column(String(100), index=True)
+    focus_level: Mapped[int] = mapped_column(Integer)
+    stress_level: Mapped[int] = mapped_column(Integer)
+    max_tremor: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    avg_stress: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    ai_command: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    ai_severity: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    recorded_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        index=True,
+    )
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
-)
+    def __repr__(self) -> str:
+        return (
+            f"<SessionDataLog session={self.session_id!r} "
+            f"focus={self.focus_level} stress={self.stress_level}>"
+        )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
-# ---------- Initialize Database ----------
+# ──────────────────────────────────────────────────────────────────────────────
+# Database helpers
+# ──────────────────────────────────────────────────────────────────────────────
 
 def init_database() -> None:
-    """Initialize database and create default doctor account"""
     Base.metadata.create_all(bind=engine)
 
     from passlib.context import CryptContext
@@ -75,17 +124,15 @@ def init_database() -> None:
 
     db = SessionLocal()
     try:
-        existing_doctor = db.query(Doctor).filter(Doctor.username == "admin").first()
-        if not existing_doctor:
-            default_doctor = Doctor(
+        if not db.query(Doctor).filter(Doctor.username == "admin").first():
+            db.add(Doctor(
                 username="admin",
                 hashed_password=pwd_context.hash("admin123"),
                 full_name="Dr. Admin",
-                email="admin@yourmove.com"
-            )
-            db.add(default_doctor)
+                email="admin@yourmove.com",
+            ))
             db.commit()
-            print("✓ Default doctor account created: admin / admin123")
+            print("✓ Default doctor created  username=admin  password=admin123")
     finally:
         db.close()
 
