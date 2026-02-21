@@ -1,16 +1,4 @@
-"""
-YourMove — Statistical Data Processing Module  v4.0
-════════════════════════════════════════════════════
-Pure-Python statistical processing for real-time VR sensor streams.
-No external numeric dependencies — runs on standard library only.
 
-Provides:
-  • RollingBuffer       — fixed-capacity deque with online statistics
-  • compute_z_score     — standardized anomaly score
-  • compute_trend_slope — least-squares linear regression slope
-  • compute_ewma        — exponential weighted moving average
-  • SignalQuality       — data completeness & reliability rating
-"""
 from __future__ import annotations
 
 import math
@@ -20,18 +8,12 @@ from dataclasses import dataclass, field
 from typing import Deque, List, Optional, Sequence, Tuple
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Rolling buffer with online Welford variance
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 class RollingBuffer:
-    """
-    Fixed-capacity ring buffer with O(1) push and online mean/variance.
-
-    Uses Welford's online algorithm for numerically stable variance
-    (critical for medical signal processing where we cannot afford
-     catastrophic cancellation errors at low amplitude).
-    """
+ 
 
     def __init__(self, capacity: int = 120) -> None:
         if capacity < 2:
@@ -121,9 +103,9 @@ class RollingBuffer:
         return min(self._data) if self._data else 0.0
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Statistical functions (pure Python)
-# ─────────────────────────────────────────────────────────────────────────────
+
+# Statistical functions 
+
 
 def compute_z_score(value: float, mean: float, std: float) -> float:
     """
@@ -205,9 +187,9 @@ def compute_ewma_scalar(value: float, prev_ema: float, alpha: float = 0.2) -> fl
     return alpha * value + (1.0 - alpha) * prev_ema
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Signal quality rating
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 @dataclass
 class SignalQuality:
@@ -247,9 +229,9 @@ class SignalQuality:
         )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+
 # Per-sensor state container
-# ─────────────────────────────────────────────────────────────────────────────
+
 
 @dataclass
 class SensorProcessor:

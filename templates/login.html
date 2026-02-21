@@ -138,15 +138,9 @@ footer{padding:18px 24px;border-top:1px solid var(--bdr);background:var(--bg2);t
 
 <nav class="navbar">
   <a class="nav-logo" href="/">
-    <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
-      <defs><linearGradient id="ln-lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00F5FF"/><stop offset="55%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#FF006E"/></linearGradient></defs>
-      <rect width="40" height="40" rx="9" fill="url(#ln-lg)" fill-opacity=".1"/>
-      <rect x="7" y="13" width="26" height="14" rx="4.5" stroke="url(#ln-lg)" stroke-width="1.8" fill="none"/>
-      <circle cx="15" cy="20" r="3.2" fill="url(#ln-lg)" fill-opacity=".45"/>
-      <circle cx="25" cy="20" r="3.2" fill="url(#ln-lg)" fill-opacity=".45"/>
-      <line x1="20" y1="8" x2="20" y2="13" stroke="url(#ln-lg)" stroke-width="1.6"/>
-      <circle cx="20" cy="7" r="2" fill="url(#ln-lg)"/>
-    </svg>
+    <img src="{{ url_for('static', path='images/yourmove-logo.png') }}"
+     alt="YourMove Logo"
+     style="width:42px;height:42px;object-fit:contain;">
     <div>
       <div class="nav-wordmark">Your<span>Move</span></div>
     </div>
@@ -157,19 +151,7 @@ footer{padding:18px 24px;border-top:1px solid var(--bdr);background:var(--bg2);t
 <main>
   <div class="login-wrap">
 
-    <!-- Institution strip -->
-    <div class="inst-strip">
-      <div class="inst-icon">
-        <svg width="15" height="15" fill="none" stroke="#8B5CF6" stroke-width="1.7" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/>
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0112 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-        </svg>
-      </div>
-      <div>
-        <div style="font-size:12px;font-weight:500;color:var(--text)">Software Engineering Department</div>
-        <div style="font-size:10px;color:var(--t3);margin-top:1px">ASD &amp; ADHD VR Therapy Research &mdash; 2025&ndash;2026</div>
-      </div>
-    </div>
+   
 
     <!-- Login card -->
     <div class="card">
@@ -218,13 +200,7 @@ footer{padding:18px 24px;border-top:1px solid var(--bdr);background:var(--bg2);t
       </div>
     </div>
 
-    <!-- Trust indicators -->
-    <div class="trust-row">
-      <div class="trust-item"><div class="trust-dot"></div>JWT Authentication</div>
-      <div class="trust-item"><div class="trust-dot"></div>bcrypt hashing</div>
-      <div class="trust-item"><div class="trust-dot"></div>Rate limited</div>
-      <div class="trust-item"><div class="trust-dot"></div>8h session</div>
-    </div>
+   
 
   </div>
 </main>

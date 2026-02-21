@@ -210,18 +210,10 @@
     <nav class="navbar fixed top-0 w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <svg class="w-10 h-10 logo-icon" viewBox="0 0 100 100" fill="none">
-                        <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#ff006e;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <circle cx="50" cy="50" r="45" stroke="url(#logoGradient)" stroke-width="4" fill="none"/>
-                        <path d="M50 20 L50 50 L70 50" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round"/>
-                    </svg>
+               <div class="flex items-center gap-3">
+                    <img src="{{ url_for('static', path='images/yourmove-logo.png') }}"
+                        alt="YourMove Logo"
+                        class="w-20 h-20 object-contain">
                     <span class="text-2xl font-bold gradient-text">YourMove</span>
                 </div>
                 <div class="hidden md:flex items-center gap-8">
@@ -240,11 +232,11 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="text-center">
                 <h1 class="text-5xl md:text-7xl font-bold mb-6 glow-text">
-                    Next-Gen <span class="gradient-text">AI-Powered</span><br>
-                    VR Therapy Platform
+                    VR Therapy for
+                    Children with <span class="gradient-text">Autism</span><br> 
                 </h1>
                 <p class="text-xl md:text-2xl mb-10 text-gray-400 max-w-3xl mx-auto">
-                    Real-time movement analysis and adaptive therapy sessions for children with autism using cutting-edge AI and immersive VR technology
+                    AI-assisted VR therapy with real-time movement monitoring to support clinicians and improve session outcomes for children with autism.
                 </p>
                 <div class="flex flex-wrap justify-center gap-4">
                     <a href="#features" class="btn-gradient text-white">Explore Features</a>
@@ -260,8 +252,8 @@
                         <div class="text-gray-400">Body Tracking Points</div>
                     </div>
                     <div class="gradient-border p-6">
-                        <div class="text-4xl font-bold gradient-text mb-2">60fps</div>
-                        <div class="text-gray-400">Real-Time Analysis</div>
+                        <div class="text-4xl font-bold gradient-text mb-2">Real-Time</div>
+                        <div class="text-gray-400">Analysis</div>
                     </div>
                     <div class="gradient-border p-6">
                         <div class="text-4xl font-bold gradient-text mb-2">AI</div>
@@ -278,8 +270,7 @@
             <div class="text-center mb-16">
                 <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">About YourMove</h2>
                 <p class="text-xl text-gray-400 max-w-3xl mx-auto">
-                    An innovative VR-based therapeutic system designed specifically for children with autism, 
-                    powered by Unreal Engine 5 and advanced AI algorithms
+                   An interactive environment that integrates virtual reality with full-body motion tracking, allowing children to immerse themselves in engaging educational and therapeutic activities. The system provides a cost-effective alternative to traditional therapy approaches while supporting the development of social and cognitive skills in an enjoyable and motivating way
                 </p>
             </div>
             <div class="grid md:grid-cols-3 gap-8">
@@ -308,7 +299,7 @@
                         </svg>
                     </div>
                     <h3 class="text-xl font-bold mb-3">Child-Focused</h3>
-                    <p class="text-gray-400">Designed with safety and engagement in mind for children aged 4-12 with ASD</p>
+                    <p class="text-gray-400">Designed with safety and engagement in mind for children aged 6-30 with ASD</p>
                 </div>
             </div>
         </div>
@@ -410,7 +401,7 @@
                 </div>
                 <div class="gradient-border p-6">
                     <h3 class="text-xl font-bold mb-3 text-pink-400">What age range is appropriate?</h3>
-                    <p class="text-gray-400">YourMove is optimized for children aged 4-12 with autism spectrum disorder. The system adapts to different developmental levels and diagnosis severity (Level 1, 2, or 3).</p>
+                    <p class="text-gray-400">YourMove is optimized for children aged 6-30 with autism spectrum disorder. The system adapts to different developmental levels and diagnosis severity (Level 1, 2, or 3).</p>
                 </div>
                 <div class="gradient-border p-6">
                     <h3 class="text-xl font-bold mb-3 text-cyan-400">How do doctors monitor sessions?</h3>
@@ -480,6 +471,6 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 pt-8 text-center text-gray-500">
-                <p>&copy; 2024 YourMove. All rights reserved. Built with ❤️ for children with autism.</p>
+                <p>&copy; 2026 YourMove. All rights reserved. Built with for children with autism.</p>
             </div>
   
